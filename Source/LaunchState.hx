@@ -1,5 +1,6 @@
 package;
 
+import openfl.Lib;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -23,6 +24,11 @@ class LaunchState extends FlxState {
 
     public function new() {
         super();
+        appVersionInfo += Application.current.meta.get('version');
+        #if debug
+        trace("sus");
+        #end
+        trace(appVersionInfo);
     }
 
     override function create() {
@@ -30,6 +36,7 @@ class LaunchState extends FlxState {
         gameCamera.bgColor = 0xFF000000; // so it's not extremely bright.
         FlxG.cameras.reset(gameCamera);
 
-
+        loadingText = new FlxText(0, FlxG.height - 18, 0, "Please wait...", 16);
+        add(loadingText);
     }
 }
