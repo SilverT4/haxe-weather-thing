@@ -19,6 +19,7 @@ class LaunchState extends FlxState {
     public static var temperatureUnits:String = ''; // THIS GETS SET IN THE SAVE DATA AFTER INITIAL SETUP, THOUGH THERE'LL ALSO BE A SETTINGS STATE.
     var gameCamera:FlxCamera;
     var appVersionInfo:String = 'HaxeFlixel Weather App - Made by devin503 - v';
+    var loadingText:FlxText;
 
     public function new() {
         super();
@@ -28,5 +29,7 @@ class LaunchState extends FlxState {
         gameCamera = new FlxCamera();
         gameCamera.bgColor = 0xFF000000; // so it's not extremely bright.
         FlxG.cameras.reset(gameCamera);
+
+
     }
 }
