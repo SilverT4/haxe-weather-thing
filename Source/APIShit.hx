@@ -31,16 +31,10 @@ typedef ResponseSearch = {
 }
 
 typedef ResponseForecast = {
-    var forecastday:ForecastDay;
-}
-
-typedef ForecastDay = {
-    var date:String;
-    var date_epoch:Int;
-    var day:ForecastDay_Det;
-    var astro:ForecastAstro;
-    var hour:Array<ForecastHour>;
     var alerts:WeatherAlertArray;
+    var forecast:ForecastDay;
+    var current:ResponseCurrent;
+    var location:ResponseLocation;
 }
 typedef WeatherAlertArray = {
     var alert:Array<WeatherAlert>;
@@ -88,7 +82,17 @@ typedef ForecastHour = {
     var gust_kph:Float;
     var uv:Float;
 }
+typedef ForecastDay = {
+    var forecastday:Array<ForecastThing>;
+}
 
+typedef ForecastThing = {
+    var hour:Array<ForecastHour>;
+    var day:ForecastDay_Det;
+    var date_epoch:Int;
+    var date:String;
+    var astro:ForecastAstro;
+}
 typedef ForecastDay_Det = {
     var maxtemp_c:Float;
     var maxtemp_f:Float;
@@ -184,7 +188,7 @@ class APIShit {
 
     public static function searchWeather(Location:String):Array<ResponseSearch> {
         var sresult = Http.requestUrl(API_LINK + 'search.json?key=' + APIKey.WeatherKey + '&q=' + Location.replace(' ', '%20'));
-        trace(sresult);
+        //trace(sresult);
         if (sresult.length < 3) {
             SusUtil.API_Failure(1006);
         }
@@ -193,10 +197,11 @@ class APIShit {
 
     public static function getForecast(Location:String):ResponseForecast {
         var forecast = Http.requestUrl(API_LINK + 'forecast.json?key=' + APIKey.WeatherKey + '&q=' + Location.replace(' ', '%20') + '&days=1&aqi=no&alerts=yes');
-        var fc:ResponseBody = cast Json.parse(forecast);
-        if (fc.error != null) {
+        var fc:ResponseForecast = cast Json.parse(forecast);
+        /*if (fc.error != null) {
             SusUtil.API_Failure(fc.error.code);
-        }
+        } */
+        lime.system.Clipboard.text = (Json.stringify(fc, "\t"));
         return cast Json.parse(forecast);
     }
 }

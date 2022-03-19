@@ -14,26 +14,27 @@ import FlxUIDropDownMenuCustom;
 
 class ForecastState extends FlxState {
     public static var location:ResponseForecast;
+    var fc:ForecastThing;
     var astronomy:Array<String> = [];
     var alertEvents:Array<String> = [];
     var weatherAlerts:Array<WeatherAlert> = [];
     var ForecastUI:FlxUITabMenu;
     var alertThing:FlxUI;
+    var astroThing:FlxUI;
+    var dayThing:FlxUI;
+    var hourThing:FlxUI;
     var alertCount:Int = 0;
     public function new () {
         super();
         trace('vagina');
         if (location != null) {
-            if (location.forecastday.alerts != null) {
-                alertEvents = PogTools.alertNameDrop(location.forecastday.alerts);
-                trace(alertEvents);
-                weatherAlerts = location.forecastday.alerts.alert;
-                alertCount = alertEvents.length;
+            weatherAlerts = location.alerts.alert;
+            if (weatherAlerts.length > 0) {
+                for (alert in weatherAlerts) {
+                    alertEvents.push(alert.event);
+                }
             }
-            if (location.forecastday.astro != null) {
-                astronomy = PogTools.astro(location.forecastday.astro);
-                trace(astronomy);
-            }
+            fc = location.forecast.forecastday[0];
         }
     }
 
@@ -76,9 +77,30 @@ class ForecastState extends FlxState {
 
         at_areas = new FlxText(at_Event.x, at_Event.y + 10, 0, 'N/A', 8);
 
+        alertThing.add(new FlxText(alertDropDown.x, alertDropDown.y - 18, 0, 'Select an alert:', 8));
+        alertThing.add(alertDropDown);
         alertThing.add(at_Event);
         alertThing.add(at_areas);
         ForecastUI.addGroup(alertThing);
+    }
+
+    function addAstroUI() {
+        astroThing = new FlxUI(null, ForecastUI);
+        astroThing.name = 'Astronomy';
+
+        var astron = PogTools.astro(fc.astro);
+
+        var sunrText = new FlxText(15, 30, 0, 'Sunrise: ' + astron[0], 16);
+        
+        var sunsText = new FlxText(15, sunrText.y + 20, 0, 'Sunset: ' + astron[1], 16);
+
+        var moonrText = new FlxText(15, sunsText.y + 20, 0, 'Moonrise: ' + astron[2], 16);
+
+        var moonsText = new FlxText(15, moonrText.y + 20, 0, 'Moonset: ' + astron[3], 16);
+
+        var moonPhase = new FlxText(15, moonsText.y + 20, 0, 'Moon phase: ' + astron[4]);
+
+        var moonIllum = new FlxText(15, moonPhase.y + 20, 0, 'Moon illumination: ' + astron[5], 16);
     }
 
     function loadAlert(Alert:WeatherAlert) {

@@ -1,5 +1,6 @@
 package;
 
+import lime.system.Clipboard;
 import flixel.input.keyboard.FlxKey;
 import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUIDropDownMenu;
@@ -123,6 +124,10 @@ class WeatherSearch extends FlxSubState {
 
     function openForecastState() {
         ForecastState.location = forecastLocation;
+        #if debug
+        trace(haxe.Json.stringify(forecastLocation, "\t"));
+        Clipboard.text = haxe.Json.stringify(forecastLocation, "\t"); // made this debug so it doesnt just copy on release builds
+        #end
         FlxG.switchState(new ForecastState());
     }
 
@@ -130,7 +135,7 @@ class WeatherSearch extends FlxSubState {
         var results = APIShit.searchWeather(Location);
         for (i in 0...results.length) {
             locations.push(results[i]);
-            trace(locations);
+            //trace(locations);
         }
         if (results.length >= 3) reloadDropDown();
     }
