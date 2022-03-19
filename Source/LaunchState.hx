@@ -55,7 +55,7 @@ class LaunchState extends FlxState {
         #end
 
         //SusUtil.getWeatherIcon('night/420.png');
-
-        openSubState(new WeatherSearch());
+        ForecastState.location = APIShit.getForecast('Day Heights, Ohio');
+        openSubState(new forecasts.HourlyForecastSubstate());
     }
 }

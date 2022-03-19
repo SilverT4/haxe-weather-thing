@@ -1,5 +1,6 @@
 package;
 
+import APIShit.ForecastDay;
 import openfl.net.URLRequest;
 import haxe.Exception;
 import sys.FileSystem;
@@ -73,6 +74,19 @@ class SusUtil {
 
     public static function makeDropList(data:Array<String>):Array<flixel.addons.ui.StrNameLabel> {
         return makeLabelArray(data, true);
+    }
+
+    public static function convertToForecast(ForecastJson:Dynamic) {
+        /**var Converted:ForecastDay = cast Json.parse('{ "alerts": { "alert": [] }, "forecast": { "forecastday": [] }');
+        Converted.alerts = ForecastJson.alerts;
+        Converted.astro = ForecastJson.astro; */
+    }
+
+    public static function getCurrentHour():Int {
+        var dte:Date = Date.now();
+        var dh = dte.toString().split(' ');
+        var dhh = dh[1].split(':');
+        return Std.parseInt(dhh[1]);
     }
     static inline final IMGS_PATH_ICON = 'Assets/Icons/weather/64x64/';
 }
