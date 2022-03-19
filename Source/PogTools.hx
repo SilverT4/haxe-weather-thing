@@ -53,7 +53,7 @@ class PogTools {
 
     Key:
 
-    0 - The headline (What the alert would display as on a website, so something like "Tornado Warning")
+    0 - The headline (Who issued the alert)
     
     1 - The message type
 
@@ -67,7 +67,7 @@ class PogTools {
 
     6 - Certainty of the alert
 
-    7 - Unsure yet. I need to double check what the API docs show it is.
+    7 - What the alert is.
 
     8 - Notes
 
