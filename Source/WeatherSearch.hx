@@ -1,5 +1,6 @@
 package;
 
+import flixel.input.keyboard.FlxKey;
 import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.FlxG;
@@ -22,6 +23,7 @@ class WeatherSearch extends FlxSubState {
     var forecastLocation:ResponseForecast;
     var locations:Array<ResponseSearch> = [];
     var DEST_ON_SEVEN:Array<Dynamic> = [];
+    var blockInputWhileTyping:Array<FlxUIInputText> = [];
     public function new() {
         super();
     }
@@ -38,18 +40,55 @@ class WeatherSearch extends FlxSubState {
         DEST_ON_SEVEN.push(SearchUI);
         setupSearchUI();
     }
-
+    var blockInput:Bool = false;
+    var curBlocker:Dynamic = null;
     override function update(elapsed:Float) {
         super.update(elapsed);
 
-        if (FlxG.keys.justPressed.SEVEN) {
-            BasicOptionMenu.returnTo = this;
-            for (asset in DEST_ON_SEVEN) {
-                asset.destroy();
-                asset = null;
+        if (blockInputWhileTyping.length > 0) {
+            for (tex in blockInputWhileTyping) {
+                if (tex.hasFocus) {
+                    blockInput = true;
+                    curBlocker = tex;
+                    FlxG.sound.muteKeys = null;
+                    FlxG.sound.volumeDownKeys = null;
+                    FlxG.sound.volumeUpKeys = null;
+                } else {
+                    return;
+                }
             }
-            close();
-            FlxG.switchState(new BasicOptionMenu());
+        }
+
+        if (blockInput) {
+            if (curBlocker != null) {
+                if (curBlocker.hasFocus) {
+                    return;
+                } else if (!curBlocker.hasFocus) {
+                    blockInput = false;
+                    curBlocker = null;
+                }
+            }
+        }
+
+        if (!blockInput) {
+            if (FlxG.sound.volumeUpKeys == null) {
+                FlxG.sound.volumeUpKeys = [FlxKey.PLUS, FlxKey.NUMPADPLUS];
+            }
+            if (FlxG.sound.volumeDownKeys == null) {
+                FlxG.sound.volumeDownKeys = [FlxKey.MINUS, FlxKey.NUMPADMINUS];
+            }
+            if (FlxG.sound.muteKeys == null) {
+                FlxG.sound.muteKeys = [FlxKey.ZERO, FlxKey.NUMPADZERO];
+            }
+            if (FlxG.keys.justPressed.SEVEN) {
+                BasicOptionMenu.returnTo = this;
+                for (asset in DEST_ON_SEVEN) {
+                    asset.destroy();
+                    asset = null;
+                }
+                close();
+                FlxG.switchState(new BasicOptionMenu());
+            }
         }
     }
 
@@ -65,6 +104,7 @@ class WeatherSearch extends FlxSubState {
 
         var searchInputBox = new FlxUIInputText(15, 30, 200, 'Enter a search term...', 8);
         DEST_ON_SEVEN.push(searchInputBox);
+        blockInputWhileTyping.push(searchInputBox);
 
         var searchButton:FlxButton = new FlxButton(searchInputBox.x + 210, searchInputBox.y, 'Search', function() {
             doSearch(searchInputBox.text);
