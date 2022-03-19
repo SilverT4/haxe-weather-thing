@@ -36,6 +36,7 @@ class LaunchState extends FlxState {
             SusUtil.API_Failure(0); // Crash if the API key is missing.
         }
         if (FlxG.keys.pressed.SEVEN) {
+            BasicOptionMenu.returnTo = this;
             FlxG.switchState(new BasicOptionMenu());
         }
     }
@@ -52,6 +53,8 @@ class LaunchState extends FlxState {
         //APIShit.getNow('Myrtle Beach');
         trace('among us');
         #end
+
+        //SusUtil.getWeatherIcon('night/420.png');
 
         openSubState(new WeatherSearch());
     }
