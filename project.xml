@@ -19,7 +19,7 @@
 
 	<haxedef name="WINDUSSY" if="debug windows" /> <!-- remind me why i did this -->
 
-	<window width="1024" height="700" fps="" background="#000000" hardware="true" vsync="true" />
+	<window width="1368" height="700" fps="" background="#000000" hardware="true" vsync="true" />
 
 	<icon path="Artussy/ballnutters.png" if="debug" />
 	<icon path="Artussy/wxIcon.png" unless="debug" />

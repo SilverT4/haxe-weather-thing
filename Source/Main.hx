@@ -13,7 +13,7 @@ import openfl.system.Capabilities;
 
 class Main extends Sprite
 {
-	var gameWidth:Int = 1024;
+	var gameWidth:Int = 1368;
 	var gameHeight:Int = 700;
 	var framerate:Int = 90;
 	var skipSplash:Bool = false;
