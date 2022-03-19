@@ -40,7 +40,7 @@ typedef ForecastDay = {
     var day:ForecastDay_Det;
     var astro:ForecastAstro;
     var hour:Array<ForecastHour>;
-    var alerts:Array<WeatherAlertArray>;
+    var alerts:WeatherAlertArray;
 }
 typedef WeatherAlertArray = {
     var alert:Array<WeatherAlert>;
