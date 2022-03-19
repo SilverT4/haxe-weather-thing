@@ -21,6 +21,7 @@ class WeatherSearch extends FlxSubState {
     var cityDropDownMenu:FlxUIDropDownMenuCustom;
     var forecastLocation:ResponseForecast;
     var locations:Array<ResponseSearch> = [];
+    var DEST_ON_SEVEN:Array<Dynamic> = [];
     public function new() {
         super();
     }
@@ -32,7 +33,9 @@ class WeatherSearch extends FlxSubState {
         SearchUI = new FlxUITabMenu(null, tabs);
         SearchUI.resize(400, 150);
         SearchUI.setPosition(FlxG.width - 425, 15);
+        trace(SearchUI);
         add(SearchUI);
+        DEST_ON_SEVEN.push(SearchUI);
         setupSearchUI();
     }
 
@@ -40,6 +43,12 @@ class WeatherSearch extends FlxSubState {
         super.update(elapsed);
 
         if (FlxG.keys.justPressed.SEVEN) {
+            BasicOptionMenu.returnTo = this;
+            for (asset in DEST_ON_SEVEN) {
+                asset.destroy();
+                asset = null;
+            }
+            close();
             FlxG.switchState(new BasicOptionMenu());
         }
     }
@@ -47,18 +56,23 @@ class WeatherSearch extends FlxSubState {
     function setupSearchUI() {
         UIAss = new FlxUI(null, SearchUI);
         UIAss.name = 'Search';
+        DEST_ON_SEVEN.push(UIAss);
 
         cityDropDownMenu = new FlxUIDropDownMenuCustom(15, 60, FlxUIDropDownMenuCustom.makeStrIdLabelArray(['Search first'], true), function (loc:String) {
             forecastLocation = APIShit.getForecast(locations[Std.parseInt(loc)].name + ', ' + locations[Std.parseInt(loc)].region); // this should give City, State!
         });
+        DEST_ON_SEVEN.push(cityDropDownMenu);
 
         var searchInputBox = new FlxUIInputText(15, 30, 200, 'Enter a search term...', 8);
+        DEST_ON_SEVEN.push(searchInputBox);
 
         var searchButton:FlxButton = new FlxButton(searchInputBox.x + 210, searchInputBox.y, 'Search', function() {
             doSearch(searchInputBox.text);
         });
+        DEST_ON_SEVEN.push(searchButton);
 
         var goButton = new FlxButton(160, 100, 'Go', openForecastState);
+        DEST_ON_SEVEN.push(goButton);
 
         UIAss.add(cityDropDownMenu);
         UIAss.add(searchInputBox);
@@ -69,6 +83,7 @@ class WeatherSearch extends FlxSubState {
 
     function openForecastState() {
         ForecastState.location = forecastLocation;
+        FlxG.switchState(new ForecastState());
     }
 
     function doSearch(Location:String) {
@@ -77,7 +92,7 @@ class WeatherSearch extends FlxSubState {
             locations.push(results[i]);
             trace(locations);
         }
-        reloadDropDown();
+        if (results.length >= 3) reloadDropDown();
     }
 
     function reloadDropDown() {
