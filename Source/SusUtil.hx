@@ -8,6 +8,7 @@ import haxe.Http;
 import flixel.FlxG;
 import openfl.Lib;
 import lime.app.Application.current as SusWindow;
+import FlxUIDropDownMenuCustom.makeStrIdLabelArray as makeLabelArray;
 using StringTools;
 
 /**Utility class. Contains utilities for files and such.
@@ -70,5 +71,8 @@ class SusUtil {
         }
     }
 
+    public static function makeDropList(data:Array<String>):Array<flixel.addons.ui.StrNameLabel> {
+        return makeLabelArray(data, true);
+    }
     static inline final IMGS_PATH_ICON = 'Assets/Icons/weather/64x64/';
 }
