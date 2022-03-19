@@ -38,5 +38,13 @@ class LaunchState extends FlxState {
 
         loadingText = new FlxText(0, FlxG.height - 18, 0, "Please wait...", 16);
         add(loadingText);
+
+        #if debug
+        //APIShit.getNow('Myrtle Beach');
+        //trace(APIShit.searchWeather('45150'));
+        trace(APIShit.getForecast('07726'));
+        #end
+
+        openSubState(new WeatherSearch());
     }
 }
