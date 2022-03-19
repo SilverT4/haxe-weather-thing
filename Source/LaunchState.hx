@@ -41,8 +41,7 @@ class LaunchState extends FlxState {
 
         #if debug
         //APIShit.getNow('Myrtle Beach');
-        //trace(APIShit.searchWeather('45150'));
-        trace(APIShit.getForecast('07726'));
+        trace('among us');
         #end
 
         openSubState(new WeatherSearch());
