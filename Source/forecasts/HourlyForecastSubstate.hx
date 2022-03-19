@@ -67,60 +67,9 @@ class HourlyForecastSubstate extends FlxSubState {
     var _10pUI:FlxUI;
     var _11pUI:FlxUI;
     var hourForeUI:FlxUITabMenu;
-    var bruhDebugThing:Array<String> = [];
     public function new() {
         super();
         //var efef:ForecastHour;
-        bruhDebugThing.push('function setupMidUI() {
-            midUI = new FlxUI(null, hourForeUI);
-            midUI.name = "Midnight";
-            
-            var wxIcon:WeatherIcon = new WeatherIcon(15, 30, getIconVariant(forecasts[0].condition.icon), 0);
-            
-            var condText = new FlxText(wxIcon.x + 69, wxIcon.getGraphicMidpoint().y - 14, 0, forecasts[0].condition.text, 12);
-            midUI.add(wxIcon);
-            midUI.add(condText);
-            hourForeUI.addGroup(midUI);
-        }'); // haha mid
-        for (e in 1...11) {
-            bruhDebugThing.push('function setup' + e + 'aUI() {
-                _' + e + 'aUI = new FlxUI(null, hourForeUI);
-                _' + e + 'aUI.name = "$e AM";
-                
-                var wxIcon:WeatherIcon = new WeatherIcon(15, 30, getIconVariant(forecasts[$e].condition.icon), $e);
-                
-                var condText = new FlxText(wxIcon.x + 69, wxIcon.getGraphicMidpoint().y - 14, 0, forecasts[$e].condition.text, 12);
-                _' + e + 'aUI.add(wxIcon);
-                _' + e + 'aUI.add(condText);
-                hourForeUI.addGroup(_' + e + 'aUI);
-            }');
-        }
-        bruhDebugThing.push('function setupNoonUI() {
-            noonUI = new FlxUI(null, hourForeUI);
-            noonUI.name = "Noon";
-            
-            var wxIcon:WeatherIcon = new WeatherIcon(15, 30, getIconVariant(forecasts[0].condition.icon), 12);
-            
-            var condText = new FlxText(wxIcon.x + 69, wxIcon.getGraphicMidpoint().y - 14, 0, forecasts[0].condition.text, 12);
-            noonUI.add(wxIcon);
-            noonUI.add(condText);
-            hourForeUI.addGroup(noonUI);
-        }');
-        for (e in 1...11) {
-            bruhDebugThing.push('function setup' + e + 'pUI() {
-                _' + e + 'pUI = new FlxUI(null, hourForeUI);
-                _' + e + 'pUI.name = "$e PM";
-                
-                var wxIcon:WeatherIcon = new WeatherIcon(15, 30, getIconVariant(forecasts[' + (e + 12) + '].condition.icon), ' + (e + 12) + ');
-                
-                var condText = new FlxText(wxIcon.x + 69, wxIcon.getGraphicMidpoint().y - 14, 0, forecasts[' + (e + 12) + '].condition.text, 12);
-                
-                _' + e + 'pUI.add(wxIcon);
-                _' + e + 'pUI.add(condText);
-                hourForeUI.addGroup(_' + e + 'pUI);
-            }');
-        }
-        lime.system.Clipboard.text = bruhDebugThing.join('\r\n');
         for (i in 0...23) {
             hourList.push(i); // lazy thingsss
         }
@@ -133,6 +82,7 @@ class HourlyForecastSubstate extends FlxSubState {
         hourForeUI = new FlxUITabMenu(null, tablist);
         hourForeUI.resize(FlxG.width, 500);
         hourForeUI.scrollFactor.set();
+        hourForeUI.selected_tab_id = "Midnight";
         add(hourForeUI);
         setupMidUI();
         setup1aUI();
