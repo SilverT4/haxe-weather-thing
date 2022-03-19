@@ -1,5 +1,6 @@
 package;
 
+import haxe.Http;
 import openfl.Lib;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -10,6 +11,7 @@ import lime.app.Application;
 import flixel.ui.FlxBar;
 import flixel.ui.FlxButton;
 import flixel.text.FlxText;
+import SusUtil;
 
 using StringTools;
 
@@ -29,6 +31,13 @@ class LaunchState extends FlxState {
         trace("sus");
         #end
         trace(appVersionInfo);
+        if (APIKey.WeatherKey == '') {
+            //SusUtil.openLink('https://weatherapi.com/'); (THIS WAS A TEST!!)
+            SusUtil.API_Failure(0); // Crash if the API key is missing.
+        }
+        if (FlxG.keys.pressed.SEVEN) {
+            FlxG.switchState(new BasicOptionMenu());
+        }
     }
 
     override function create() {

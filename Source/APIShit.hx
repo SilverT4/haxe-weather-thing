@@ -12,6 +12,12 @@ typedef ResponseBody = {
     var location:ResponseLocation;
     var current:ResponseCurrent;
     var search:Array<ResponseSearch>;
+    var error:APIError;
+}
+
+typedef APIError = {
+    var code:Int;
+    var message:String;
 }
 
 typedef ResponseSearch = {
@@ -170,17 +176,27 @@ class APIShit {
         var weatherNow = Http.requestUrl(API_LINK + 'current.json?key=' + APIKey.WeatherKey + '&q=' + Location.replace(' ', '%20') + '&aqi=no');
         trace(weatherNow);
         var curThing:ResponseBody = cast Json.parse(weatherNow);
+        if (curThing.error != null) {
+            SusUtil.API_Failure(curThing.error.code);
+        }
         trace(curThing);
     }
 
     public static function searchWeather(Location:String):Array<ResponseSearch> {
         var sresult = Http.requestUrl(API_LINK + 'search.json?key=' + APIKey.WeatherKey + '&q=' + Location.replace(' ', '%20'));
         trace(sresult);
+        if (sresult.length < 3) {
+            SusUtil.API_Failure(1006);
+        }
         return cast Json.parse(sresult);
     }
 
     public static function getForecast(Location:String):ResponseForecast {
         var forecast = Http.requestUrl(API_LINK + 'forecast.json?key=' + APIKey.WeatherKey + '&q=' + Location.replace(' ', '%20') + '&days=1&aqi=no&alerts=yes');
+        var fc:ResponseBody = cast Json.parse(forecast);
+        if (fc.error != null) {
+            SusUtil.API_Failure(fc.error.code);
+        }
         return cast Json.parse(forecast);
     }
 }

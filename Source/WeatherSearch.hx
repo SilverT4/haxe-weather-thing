@@ -36,6 +36,14 @@ class WeatherSearch extends FlxSubState {
         setupSearchUI();
     }
 
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+
+        if (FlxG.keys.justPressed.SEVEN) {
+            FlxG.switchState(new BasicOptionMenu());
+        }
+    }
+
     function setupSearchUI() {
         UIAss = new FlxUI(null, SearchUI);
         UIAss.name = 'Search';
@@ -76,7 +84,7 @@ class WeatherSearch extends FlxSubState {
         if (cityDropDownMenu != null) {
             var cityNames:Array<String> = [];
             for (loc in locations) {
-                cityNames.push(loc.name);
+                cityNames.push(loc.name + ', ' + loc.region);
             }
             cityDropDownMenu.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(cityNames, false));
         }
