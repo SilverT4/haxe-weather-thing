@@ -5,6 +5,12 @@ import PathFinder;
 
 using StringTools;
 
+/**A custom FlxSprite class to simplify the process of loading the icon for the current weather, or the icon for a forecast's weather.
+    @param x The X position
+    @param y The Y position
+    @param icon The icon PNG
+    @param hour Decides whether the icon is a day or night icon. (7pm-4am are night, 5am-6pm are day)
+    @since v0.0.2*/
 class WeatherIcon extends FlxSprite {
     private var nightHours:Array<Int> = [
         0,
