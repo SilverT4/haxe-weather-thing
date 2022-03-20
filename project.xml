@@ -15,8 +15,8 @@
 	<haxelib name="weatherapi-hx" />
 	
 	
-	<assets path="Assets/Sounds/Web/" rename="Assets/Sounds/" if="web" />
-	<assets path="Assets/Sounds/Sys/" rename="Assets/Sounds/" if="sys" />
+	<assets path="Assets/Sounds/" exclude="*.ogg" if="web" />
+	<assets path="Assets/Sounds/" exclude="*.mp3" unless="web" />
 	<assets path="Assets/Icons" exclude="*.md" />
 	<assets path="Assets/Images" exclude="Eduardo.*" if="web" />
 	<assets path="Assets/Placeholders" exclude="*.md" />

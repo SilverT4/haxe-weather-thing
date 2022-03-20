@@ -17,7 +17,7 @@ using StringTools;
 class PathFinder {
     static inline final ERROR_404 = 'not found';
 
-    static inline final AudioPath = 'Assets/Sounds/';
+    static inline final AudioPath = 'Assets/Sounds/'; // fuck
     static inline final IconPath = 'Assets/Icons/';
     static inline final WxIconPath_Day = 'Assets/Icons/weather/64x64/day/';
     static inline final WxIconPath_Night = 'Assets/Icons/weather/64x64/night/';
