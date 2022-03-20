@@ -8,6 +8,7 @@ using StringTools;
 /**Well well well.
     @since WELL WELL WELL. (v0.0.2)*/
 class Eduardo extends FlxSprite {
+    #if sys
     var doinJumpscare:Bool = false;
     public function jumpscare() {
         if (animation.getByName('wellWellWell') != null) {
@@ -50,4 +51,11 @@ class Eduardo extends FlxSprite {
             animation.play('idle');
         }
     }
+    #else
+    public function new(x:Float, y:Float) {
+        super(x, y);
+        loadGraphic(PathFinder.getIcon('113.png', 'night'));
+        flixel.FlxG.state.openSubState(new web.WebNotice('Eduardo file still being called from source of this state. You\'ll see a weather icon to save on memory, as the Eduardo spritesheet is pretty large.'));
+    }
+    #end
 }
