@@ -39,12 +39,21 @@ class LaunchState extends FlxState {
             //SusUtil.openLink('https://weatherapi.com/'); (THIS WAS A TEST!!)
             SusUtil.API_Failure(0); // Crash if the API key is missing.
         }
-        if (FlxG.keys.pressed.SEVEN) {
+    }
+    override function update(elapsed:Float) {
+        if (FlxG.keys.justPressed.SEVEN) {
             BasicOptionMenu.returnTo = this;
             FlxG.switchState(new BasicOptionMenu());
         }
-    }
 
+        #if debug
+        if (FlxG.keys.justPressed.R) {
+            FlxG.switchState(new InitialSetup());
+        }
+        #end
+
+        super.update(elapsed);
+    }
     override function create() {
         gameCamera = new FlxCamera();
         gameCamera.bgColor = 0xFF000000; // so it's not extremely bright.
@@ -63,7 +72,6 @@ class LaunchState extends FlxState {
         //APIShit.getNow('Myrtle Beach');
         trace('among us');
         #end
-
         //SusUtil.getWeatherIcon('night/420.png');
         new FlxTimer().start(3, function(tmr:FlxTimer) {
             if (!FlxG.save.data.finishedSetup) FlxG.switchState(new InitialSetup()) else {
