@@ -57,6 +57,8 @@ class LaunchState extends FlxState {
         spin.spin();
         add(spin);
 
+        persistentUpdate = true; //speen
+
         #if debug
         //APIShit.getNow('Myrtle Beach');
         trace('among us');
