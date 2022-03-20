@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="speen.png">
+	<!-- Created with Adobe Animate version 20.5.0.29329 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="spinner go brr0000" x="0" y="0" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0001" x="35" y="0" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0002" x="70" y="0" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0003" x="70" y="0" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0004" x="105" y="0" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0005" x="140" y="0" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0006" x="140" y="0" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0007" x="175" y="0" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0008" x="210" y="0" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0009" x="0" y="35" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0010" x="35" y="35" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0011" x="70" y="35" width="36" height="35"/>
+	<SubTexture name="spinner go brr0012" x="106" y="35" width="36" height="35"/>
+	<SubTexture name="spinner go brr0013" x="142" y="35" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0014" x="177" y="35" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0015" x="212" y="35" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0016" x="0" y="70" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0017" x="35" y="70" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0018" x="35" y="70" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0019" x="70" y="70" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0020" x="105" y="70" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0021" x="140" y="70" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0022" x="175" y="70" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0023" x="210" y="70" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0024" x="210" y="70" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0025" x="0" y="105" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0026" x="35" y="105" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0027" x="35" y="105" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0028" x="70" y="105" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0029" x="105" y="105" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0030" x="140" y="105" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0031" x="175" y="105" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0032" x="210" y="105" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0033" x="0" y="140" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0034" x="35" y="140" width="36" height="35"/>
+	<SubTexture name="spinner go brr0035" x="71" y="140" width="36" height="35"/>
+	<SubTexture name="spinner go brr0036" x="71" y="140" width="36" height="35"/>
+	<SubTexture name="spinner go brr0037" x="107" y="140" width="36" height="35"/>
+	<SubTexture name="spinner go brr0038" x="143" y="140" width="36" height="35"/>
+	<SubTexture name="spinner go brr0039" x="179" y="140" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0040" x="214" y="140" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0041" x="0" y="175" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+	<SubTexture name="spinner go brr0042" x="35" y="175" width="35" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="35"/>
+</TextureAtlas>
