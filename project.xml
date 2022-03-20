@@ -13,10 +13,9 @@
 	<haxelib name="openfl" />
 	<haxelib name="weatherapi-hx" />
 	
-	<assets path="Assets" />
-	<assets path="Assets/Sounds" exclude="*.ogg" if="web" />
-	<assets path="Assets/Sounds" exclude="*.mp3" unless="web" />
-	<assets path="Assets" exclude="*.md" /> <!-- i dont need it -->
+	
+	<assets path="Assets" exclude="*.ogg *.md" if="web" />
+	<assets path="Assets" exclude="*.mp3 *.md" unless="web" />
 
 	<haxedef name="WINDUSSY" if="debug windows" /> <!-- remind me why i did this -->
 
