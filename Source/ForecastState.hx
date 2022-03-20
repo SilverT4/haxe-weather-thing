@@ -9,6 +9,7 @@ import PogTools;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUI;
 import flixel.ui.FlxButton;
+import flixel.util.FlxTimer;
 import flixel.text.FlxText;
 import FlxUIDropDownMenuCustom;
 import util.WeatherIcon;
@@ -16,6 +17,7 @@ import util.WeatherIcon;
 class ForecastState extends FlxState {
     public static var location:ResponseForecast;
     var fc:ForecastThing;
+    static var severeEvents:Array<String> = ['Tornado Warning', 'Hurricane Warning', 'Tropical Storm Warning', 'Flash Flood Warning', 'Flood Warning']; // to start just these
     var astronomy:Array<String> = [];
     var alertEvents:Array<String> = [];
     var weatherAlerts:Array<WeatherAlert> = [];
@@ -40,6 +42,7 @@ class ForecastState extends FlxState {
     }
 
     override function create() {
+        alertCount = weatherAlerts.length;
         var tabs = [
             {name: 'Today', label: 'Today'},
             {name: 'Hourly', label: 'Hourly Forecast'},
@@ -57,6 +60,7 @@ class ForecastState extends FlxState {
         addAstroUI();
         addTodayUI();
         ForecastUI.selected_tab_id = 'Today';
+        doAlertCheck();
     }
 
     override function update(elapsed:Float) {
@@ -69,6 +73,7 @@ class ForecastState extends FlxState {
     var at_Event:FlxText;
     var at_areas:FlxText;
     var at_desc:FlxText;
+    var at_headline:FlxText;
     function addAlertUI() {
         alertThing = new FlxUI(null, ForecastUI);
         alertThing.name = 'Alerts';
@@ -80,7 +85,9 @@ class ForecastState extends FlxState {
 
         at_Event = new FlxText(alertDropDown.x, alertDropDown.y + 30, 0, 'Pick an alert first.', 12);
 
-        at_areas = new FlxText(at_Event.x, at_Event.y + 14, 0, 'N/A', 12);
+        at_headline = new FlxText(at_Event.x, at_Event.y + 14, 0, 'Local ' + Sys.systemName() + ' user gets confused', 12);
+
+        at_areas = new FlxText(at_Event.x, at_headline.y + 14, 0, 'N/A', 12);
 
         at_desc = new FlxText(at_areas.x, at_areas.y + 14, 0, 'No description', 12);
 
@@ -88,8 +95,32 @@ class ForecastState extends FlxState {
         alertThing.add(at_Event);
         alertThing.add(at_areas);
         alertThing.add(at_desc);
+        alertThing.add(at_headline);
         alertThing.add(alertDropDown);
         ForecastUI.addGroup(alertThing);
+    }
+
+    function doAlertCheck() {
+        for (event in alertEvents) {
+            if (severeEvents.contains(event)) {
+                doSevereInterrupt(2);
+            }
+        }
+    }
+
+    function doSevereInterrupt(delay:Float) {
+        new FlxTimer().start(delay, function(tmr:FlxTimer) {
+            FlxG.sound.play(PathFinder.sound('susSound'), 1, false, null, true, fancySwitch); // i'm hoping to make an animation thingy that plays instead of a camera fade effect
+        });
+    }
+
+    function fancySwitch() {
+        FlxG.camera.fade(0xFF000000, 1, false, function() {
+            ForecastUI.selected_tab_id = 'Alerts';
+            FlxG.camera.fade(0xFF000000, 1, true, function() {
+                trace('e');
+            });
+        });
     }
 
     function addAstroUI() {
@@ -106,7 +137,7 @@ class ForecastState extends FlxState {
 
         var moonsText = new FlxText(15, moonrText.y + 20, 0, 'Moonset: ' + astron[3], 16);
 
-        var moonPhase = new FlxText(15, moonsText.y + 20, 0, 'Moon phase: ' + astron[4]);
+        var moonPhase = new FlxText(15, moonsText.y + 20, 0, 'Moon phase: ' + astron[4], 16);
 
         var moonIllum = new FlxText(15, moonPhase.y + 20, 0, 'Moon illumination: ' + astron[5], 16);
 
@@ -152,6 +183,8 @@ class ForecastState extends FlxState {
 
         at_desc.text = alertValues[11];
         at_desc.fieldWidth = 0;
+        at_headline.text = alertValues[0];
+        at_headline.fieldWidth = 0;
     }
     function reloadAlertDropDown() {
         var droplist:Array<String> = [];

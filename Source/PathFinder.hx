@@ -66,8 +66,15 @@ class PathFinder {
         @param variant Day or night
         @since v0.0.2*/
     public static function getIcon(icon:String, variant:String) {
-        if (variant == 'day' && exists(WxIconPath_Day + icon + '.png')) return WxIconPath_Day + icon + '.png';
-        else if (variant == 'night' && exists(WxIconPath_Night + icon + '.png')) return WxIconPath_Night + icon + '.png';
+        var icpath:String = '';
+        var icname:String = '';
+        if (variant == 'day') icpath = WxIconPath_Day;
+        else icpath = WxIconPath_Night;
+        var heh = icon.split('/');
+        for (i in 0...heh.length) {
+            if (heh[i].contains('.png')) icname = heh[i];
+        }
+        if (exists(icpath + icname)) return icpath + icname;
         return 'not found';
     }
     /**Get the Sparrow atlas of a spritesheet.
