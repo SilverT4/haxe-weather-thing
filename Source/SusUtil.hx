@@ -23,6 +23,7 @@ using StringTools;
 class SusUtil {
     #if sys
     static var API_Messages:Map<Int, String> = [
+        -999 => "Your save data may be corrupt. It's possible a required variable in your save data is missing, or\nit is not the value a function is looking for.\n\nTry to reset your save data. To do this on a Windows PC, open the Run dialogue\nby pressing WINDOWS+R at the same time.\nType '%AppData%\\devin503' and press enter.\nDelete the 'FlxWeather' folder. (Press SHIFT and DEL at the same time)\n\nIf you're using this application from the Releases page,\nand the save data reset didn't work, press the 7 key on the launch screen, before this error can appear. Press the I key to open the issues page on Github and create an issue.\n\nIf you're compiling from source, check any files in the Source directory for 'FlxG.save.data' and see if you have potentially misspelled a variable name in the arguments.",
         -257 => "A readJsonFile function failed.\nReason: Non-existent JSON file given.\n\nIf you're using a build of this application from the Releases page, press 7 on the search screen. Then, press I to open the issues page and create an issue.\n\nIf you're compiling from source, check any files in the Source directory for 'SusUtil.readJsonFile' and see if you have potentially misspelled a file name in the arguments.",
         -256 => "A parseJson function failed.\nReason: No input given.\n\nIf you're using a build of this application from the Releases page, press 7 on the search screen. Then, press I to open the issues page and create an issue.\n\nIf you're compiling from source, check any files in the Source directory for 'SusUtil.readJsonFile' and see if you have forgotten any arguments in any results.",
         -128 => "Icon file not found.\n\nIf you're using a build of this application from the Releases page, press 7 on the search screen. Then, press W to open your browser and download the icons from WeatherAPI. Once done, extract the zip file to " + Sys.getCwd().replace('\\', '/') + "Assets/Icons and relaunch the application. If it doesn't work, press 7 on the search screen and press I to open the issues page on GitHub. Create an issue about this.\n\nIf you're compiling from source, check the Documents/Icons.md file, as it contains a link to the weather icons. Just follow the same instructions as above.",
@@ -38,9 +39,10 @@ class SusUtil {
     ];
     #else
     static var API_Messages:Map<Int, String> = [
+        -999 => "Your save data may be corrupt. It's possible a required variable in your save data is missing, or\nit is not the value a function is looking for.\n\nIf you're using this on the GitHub.io page, click the \"Create an issue...\" button and select \"Weather App\"\n\nIf you're compiling from source, check any files in the Source directory for 'FlxG.save.data' and see if you have potentially misspelled a variable name in the arguments.",
         -257 => "A readJsonFile function failed.\nReason: Non-existent JSON file given.\n\nIf you're using this on the GitHub.io page, click the \"Create an issue...\" button and select \"Weather App\"\n\nIf you're compiling from source, check any files in the Source directory for 'SusUtil.readJsonFile' and see if you have potentially misspelled a file name in the arguments.",
         -256 => "A parseJson function failed.\nReason: No input given.\n\nIf you're using this on the GitHub.io page, click the \"Create an issue...\" button and select \"Weather App\"\n\nIf you're compiling from source, check any files in the Source directory for 'SusUtil.readJsonFile' and see if you have forgotten any arguments in any results.",
-        -128 => "Icon file not found.\n\nIf you're using this on the GitHub.io page, click the \"Create an issue...\" button and select \"Weather App\"\n\nIf you're compiling from source, check the Documents/Icons.md file, as it contains a link to the weather icons. Just follow the same instructions as above.",
+        -128 => "Icon file not found.\n\nIf you're using this on the GitHub.io page, click the \"Create an issue...\" button and select \"Weather App\"\n\nIf you're compiling from source, check the Documents/Icons.md file, as it contains a link to the weather icons. Just follow the instructions in Documents/Icons.md",
         0 => "So sorry, this application can only be used if an API key is set up in the source code.\n\nIf you're using this on the GitHub.io page, click the \"Create an issue...\" button and select \"Weather App\"\n\nIf you've built this application yourself, please check the WeatherKey variable in Source/APIKey.hx file and make sure your API key is in there! You can find instructions on how to get one by reading Documents/Building.md if necessary.",
         1002 => "API request not provided.\n\nIf you're using this on the GitHub.io page, click the \"Create an issue...\" button and select \"Weather App\"\n\nIf you're compiling from source, check any requests you have added to APIShit.hx or other files in the Source directory and see if your request string has \"?key=\" in it. If it has the key parameter and you still get this error, create an issue.",
         1003 => "API request did not include parameter 'q'.\n\nIf you're using this on the GitHub.io page, click the \"Create an issue...\" button and select \"Weather App\"\n\nIf you're compiling from source, check any requests you have added to APIShit.hx or other files in the Source directory and see if your request string has \"&q=\" in it. If it does and you still get this error, create an issue.",
@@ -59,18 +61,18 @@ class SusUtil {
             @since v0.0.1*/
     public static function API_Failure(Code:Int) {
         switch (Code) {
-            case 0 | 1002 | 1003 | 1005 | 2006 | 2007 | 2008 | -128 | -256 | -257:
+            case 0 | 1002 | 1003 | 1005 | 2006 | 2007 | 2008 | -128 | -256 | -257 | -999:
                 #if sys
-                throw new Exception(API_Messages[Code]);
+                throw new Exception(API_Messages[Code] + '\n\n(Error code: $Code)');
                 #else
-                FlxG.state.openSubState(new web.WebError(API_Messages[Code]));
+                FlxG.state.openSubState(new web.WebError(API_Messages[Code] + '\n\n(Error code: $Code)'));
                 #end
             case 1006 | 9999:
                 trace('e');
                 #if sys
-                SusWindow.window.alert(API_Messages[Code]);
+                SusWindow.window.alert(API_Messages[Code] + '\n\n(Error code: $Code)');
                 #else
-                FlxG.state.openSubState(new web.WebNotice(API_Messages[Code]));
+                FlxG.state.openSubState(new web.WebNotice(API_Messages[Code] + '\n\n(Error code: $Code)'));
                 #end
         }
     }
