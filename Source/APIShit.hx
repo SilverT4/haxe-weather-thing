@@ -1,9 +1,12 @@
 package;
 
 import haxe.Json;
+#if sys
 import sys.Http;
-import haxe.xml.Fast;
-import cpp.abi.Abi;
+#else
+import openfl.net.URLLoader;
+import openfl.net.URLRequest;
+#end
 import APIKey;
 
 using StringTools;
@@ -175,11 +178,22 @@ typedef WeatherCondition = {
 }
 class APIShit {
     static inline final QUERY = '&q=';
-
+    
     // GOTTA FIGURE IT OUT
     static inline final API_LINK = 'http://api.weatherapi.com/v1/';
+    static var lonker:URLLoader;
+    static function getFromURL(URL:String) {
+        lonker = new URLLoader();
+        #if sys
+        return Http.requestUrl(URL);
+        #else
+        lonker.load(new URLRequest(URL));
+        return lonker.data;
+        lonker = null;
+        #end
+    }
     public static function getNow(Location:String) {
-        var weatherNow = Http.requestUrl(API_LINK + 'current.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20') + '&aqi=no');
+        var weatherNow = getFromURL(API_LINK + 'current.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20') + '&aqi=no');
         trace(weatherNow);
         var curThing:ResponseBody = cast Json.parse(weatherNow);
         if (curThing.error != null) {
@@ -187,18 +201,18 @@ class APIShit {
         }
         trace(curThing);
     }
-
+    
     public static function searchWeather(Location:String):Array<ResponseSearch> {
-        var sresult = Http.requestUrl(API_LINK + 'search.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20'));
+        var sresult = getFromURL(API_LINK + 'search.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20'));
         //trace(sresult);
         if (sresult.length < 3) {
             SusUtil.API_Failure(1006);
         }
         return cast Json.parse(sresult);
     }
-
+    
     public static function getForecast(Location:String):ResponseForecast {
-        var forecast = Http.requestUrl(API_LINK + 'forecast.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20') + '&days=1&aqi=no&alerts=yes');
+        var forecast = getFromURL(API_LINK + 'forecast.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20') + '&days=1&aqi=no&alerts=yes');
         var fc:ResponseForecast = cast Json.parse(forecast);
         /*if (fc.error != null) {
             SusUtil.API_Failure(fc.error.code);
