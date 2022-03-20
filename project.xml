@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<meta title="HaxeFlixel Weather Thing" package="dumb.devin503.weather" version="0.0.2" company="devin503" />
+	<meta title="HaxeFlixel Weather Thing" package="dumb.devin503.weather" version="0.0.3" company="devin503" />
 	<app main="Main" path="Export" file="FlxWeather" />
 	
 	<source path="Source" />
@@ -20,7 +20,7 @@
 
 	<haxedef name="WINDUSSY" if="debug windows" /> <!-- remind me why i did this -->
 
-	<window width="1368" height="700" fps="" background="#000000" hardware="true" vsync="true" />
+	<window width="1368" height="700" fps="" background="#000000" hardware="false" vsync="true" />
 
 	<icon path="Artussy/ballnutters.png" if="debug" />
 	<icon path="Artussy/wxIcon.png" unless="debug" />
