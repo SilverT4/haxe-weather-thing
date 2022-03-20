@@ -26,6 +26,7 @@ class WebError extends FlxSubState {
         add(errorBg);
 
         errorTxt = new FlxText(0, 0, 0, err_Msg, 16);
+        errorTxt.setFormat(null, 16, 0xFFFFFFFF, CENTER);
         errorTxt.screenCenter();
         errorTxt.scrollFactor.set();
         add(errorTxt);
