@@ -27,8 +27,14 @@ class WeatherSearch extends FlxSubState {
     var DEST_ON_SEVEN:Array<Dynamic> = [];
     var blockInputWhileTyping:Array<FlxUIInputText> = [];
     var ed:Eduardo;
+    public static var instance:WeatherSearch;
     public function new() {
         super();
+        instance = this;
+        #if debug
+        //FlxG.console.registerClass(this);
+        FlxG.console.registerObject('ws', instance);
+        #end
     }
 
     override function create() {
@@ -43,8 +49,10 @@ class WeatherSearch extends FlxSubState {
         DEST_ON_SEVEN.push(SearchUI);
         setupSearchUI();
         ed = new Eduardo(0, 0);
-        ed.visible = false;
+        //ed.visible = false;
+        ed.dance();
         add(ed);
+        trace(ed);
 
         if (ForecastState.location != null) {
             var exitButton = new FlxButton(0, 69, 'Exit', function() {
@@ -52,12 +60,14 @@ class WeatherSearch extends FlxSubState {
             });
             add(exitButton);
         }
+
+        tryUpdate(0);
     }
     var blockInput:Bool = false;
     var curBlocker:Dynamic = null;
     override function update(elapsed:Float) {
-        super.update(elapsed);
 
+        super.update(elapsed);
         if (blockInputWhileTyping.length > 0) {
             for (tex in blockInputWhileTyping) {
                 if (tex.hasFocus) {
@@ -85,11 +95,18 @@ class WeatherSearch extends FlxSubState {
 
         if (ed != null) {
             ed.update(elapsed);
-            ed.dance();
-            if (FlxG.keys.justPressed.L && !blockInput) {
+            if (ed.animation.curAnim.finished) ed.dance();
+            /* if (FlxG.keys.justPressed.L && !blockInput) {
                 ed.visible = true;
                 ed.jumpscare();
-            }
+            } */
+        }
+
+        if (FlxG.keys.justPressed.L && !blockInput) {
+            ed.animation.play('wellWellWell');
+            FlxG.sound.play(PathFinder.loud_sound('theFunnyWell'), 1, false, null, true, function() {
+                trace('you have been well well well\'d');
+            });
         }
 
         if (!blockInput) {
@@ -145,6 +162,7 @@ class WeatherSearch extends FlxSubState {
 
     function openForecastState() {
         ForecastState.location = forecastLocation;
+        _parentState.persistentUpdate = false; // so speen stops
         #if debug
         trace(haxe.Json.stringify(forecastLocation, "\t"));
         Clipboard.text = haxe.Json.stringify(forecastLocation, "\t"); // made this debug so it doesnt just copy on release builds
