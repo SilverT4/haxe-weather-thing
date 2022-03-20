@@ -16,12 +16,7 @@ using StringTools;
 class HourlyForecastSubstate extends FlxSubState {
     var hourList:Array<Int> = [];
     var forecasts:Array<ForecastHour> = [];
-    var tablist = [
-        {name: 'hour_0', label: 'Midnight'},
-        {name: 'hour_1', label: '1 AM'},
-        {name: 'hour_2', label: '2 AM'},
-        {name: 'hour_3', label: '3 AM'},
-        {name: 'hour_4', label: '4 AM'},
+    var tablist_day = [
         {name: 'hour_5', label: '5 AM'},
         {name: 'hour_6', label: '6 AM'},
         {name: 'hour_7', label: '7 AM'},
@@ -35,13 +30,20 @@ class HourlyForecastSubstate extends FlxSubState {
         {name: 'hour_15', label: '3 PM'},
         {name: 'hour_16', label: '4 PM'},
         {name: 'hour_17', label: '5 PM'},
-        {name: 'hour_18', label: '6 PM'},
+        {name: 'hour_18', label: '6 PM'}
+    ]; // MESSY AF BUT IT WORKS
+    var tablist_night = [
+        {name: 'hour_0', label: 'Midnight'},
+        {name: 'hour_1', label: '1 AM'},
+        {name: 'hour_2', label: '2 AM'},
+        {name: 'hour_3', label: '3 AM'},
+        {name: 'hour_4', label: '4 AM'},
         {name: 'hour_19', label: '7 PM'},
         {name: 'hour_20', label: '8 PM'},
         {name: 'hour_21', label: '9 PM'},
         {name: 'hour_22', label: '10 PM'},
         {name: 'hour_23', label: '11 PM'}
-    ]; // MESSY AF BUT IT WORKS
+    ]; // a BIT more organised!!
     var midUI:FlxUI;
     var _1aUI:FlxUI;
     var _2aUI:FlxUI;
@@ -67,8 +69,15 @@ class HourlyForecastSubstate extends FlxSubState {
     var _10pUI:FlxUI;
     var _11pUI:FlxUI;
     var hourForeUI:FlxUITabMenu;
-    public function new() {
+    var lookingAt:String = 'day';
+    public function new(dayNight:Int) {
         super();
+        if (dayNight == 0) {
+            trace('day');
+        } else {
+            lookingAt = 'night';
+            trace('night');
+        }
         //var efef:ForecastHour;
         for (i in 0...23) {
             hourList.push(i); // lazy thingsss
@@ -79,35 +88,40 @@ class HourlyForecastSubstate extends FlxSubState {
     }
     
     override function create() {
-        hourForeUI = new FlxUITabMenu(null, tablist);
+        if (lookingAt == 'night')
+        hourForeUI = new FlxUITabMenu(null, tablist_night);
+        else hourForeUI = new FlxUITabMenu(null, tablist_day);
         hourForeUI.resize(FlxG.width, 500);
         hourForeUI.scrollFactor.set();
         hourForeUI.selected_tab_id = "Midnight";
         add(hourForeUI);
-        setupMidUI();
-        setup1aUI();
-        setup2aUI();
-        setup3aUI();
-        setup4aUI();
-        setup5aUI();
-        setup6aUI();
-        setup7aUI();
-        setup8aUI();
-        setup9aUI();
-        setup10aUI();
-        setup11aUI();
-        setupNoonUI();
-        setup1pUI();
-        setup2pUI();
-        setup3pUI();
-        setup4pUI();
-        setup5pUI();
-        setup6pUI();
-        setup7pUI();
-        setup8pUI();
-        setup9pUI();
-        setup10pUI();
-        setup11pUI();
+        if (lookingAt == 'night') {
+            setupMidUI();
+            setup1aUI();
+            setup2aUI();
+            setup3aUI();
+            setup4aUI();
+            setup7pUI();
+            setup8pUI();
+            setup9pUI();
+            setup10pUI();
+            setup11pUI();
+        } else if (lookingAt == 'day') {
+            setup5aUI();
+            setup6aUI();
+            setup7aUI();
+            setup8aUI();
+            setup9aUI();
+            setup10aUI();
+            setup11aUI();
+            setupNoonUI();
+            setup1pUI();
+            setup2pUI();
+            setup3pUI();
+            setup4pUI();
+            setup5pUI();
+            setup6pUI();
+        }
     }
     // BEGIN MESS OF SETUP FUNCTIONS!!
     function setupMidUI() {
