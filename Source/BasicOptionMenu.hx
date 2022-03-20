@@ -19,6 +19,12 @@ using StringTools;
 @since v0.0.1*/
 class BasicOptionMenu extends FlxState {
     public static var returnTo:Dynamic;
+    var OptionList:Array<String> = [
+        'Press the I key to open the issues page on the app\'s GitHub repository.',
+        #if sys
+        'Press the W key to download the weather icons from WeatherAPI.',
+        #end
+    ];
     public function new () {
         super();
     }
@@ -27,7 +33,7 @@ class BasicOptionMenu extends FlxState {
         var optText = new FlxText(0,0,0, '**Basic Options Menu**', 12);
         optText.screenCenter(X);
         add(optText);
-        var optList = new FlxText(0, 0, FlxG.width, 'Press the I key to open the GitHub issues page.', 16);
+        var optList = new FlxText(0, 0, FlxG.width, OptionList.join('\n'), 16);
         optList.setFormat(null, 16, FlxColor.WHITE, CENTER);
         optList.screenCenter();
         add(optList);
@@ -38,7 +44,7 @@ class BasicOptionMenu extends FlxState {
         if (FlxG.keys.justPressed.I) {
             SusUtil.openLink('https://github.com/devin503/haxe-weather-thing/issues');
         }
-
+        #if sys
         if (FlxG.keys.justPressed.W) {
             //SusUtil.openLink('https://cdn.weatherapi.com/weather.zip');
             Application.current.window.alert("Now initiating download of weather icons.\n\nPlease download the zip to a folder you'll remember, then extract the zip file to " + Sys.getCwd().replace('\\', '/') + "Assets/Icons\n\nRelaunch the application once you have done so.");
@@ -48,6 +54,7 @@ class BasicOptionMenu extends FlxState {
             _file.addEventListener(IOErrorEvent.IO_ERROR, onDlError);
             _file.download(new URLRequest('https://cdn.weatherapi.com/weather.zip'));
         }
+        #end
 
         if (FlxG.keys.justPressed.ESCAPE) {
             if (returnTo != null) {
@@ -62,7 +69,7 @@ class BasicOptionMenu extends FlxState {
             }
         }
     }
-
+    #if sys
     function onDlComplete(_):Void {
         _file.removeEventListener(Event.SELECT, onDlComplete);
         _file.removeEventListener(Event.CANCEL, onDlCancel);
@@ -88,4 +95,5 @@ class BasicOptionMenu extends FlxState {
         _file = null;
         FlxG.log.error('Download failed!');
     }
+    #end
 }
