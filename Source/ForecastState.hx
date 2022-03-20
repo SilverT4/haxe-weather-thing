@@ -17,7 +17,7 @@ import util.WeatherIcon;
 class ForecastState extends FlxState {
     public static var location:ResponseForecast;
     var fc:ForecastThing;
-    static var severeEvents:Array<String> = ['Tornado Warning', 'Hurricane Warning', 'Tropical Storm Warning', 'Flash Flood Warning', 'Flood Warning']; // to start just these
+    static var severeEvents:Array<String> = ['Tornado Warning', 'Hurricane Warning', 'Tropical Storm Warning', 'Flash Flood Warning', 'Flood Warning', 'Sus Warning']; // to start just these
     var astronomy:Array<String> = [];
     var alertEvents:Array<String> = [];
     var weatherAlerts:Array<WeatherAlert> = [];
@@ -26,6 +26,7 @@ class ForecastState extends FlxState {
     var astroThing:FlxUI;
     var dayThing:FlxUI;
     var hourThing:FlxUI;
+    var nowThing:FlxUI;
     var alertCount:Int = 0;
     public function new () {
         super();
@@ -47,7 +48,8 @@ class ForecastState extends FlxState {
             {name: 'Today', label: 'Today'},
             {name: 'Hourly', label: 'Hourly Forecast'},
             {name: 'Astronomy', label: 'Astronomy Forecast'},
-            {name: 'Alerts', label: 'Weather Alerts ($alertCount)'}
+            {name: 'Alerts', label: 'Weather Alerts ($alertCount)'},
+            {name: 'Current', label: 'Your Current Conditions'}
         ];
         ForecastUI = new FlxUITabMenu(null, tabs);
         ForecastUI.resize(725, 500);
@@ -59,13 +61,18 @@ class ForecastState extends FlxState {
         addAlertUI();
         addAstroUI();
         addTodayUI();
+        addNowUI();
         ForecastUI.selected_tab_id = 'Today';
         doAlertCheck();
     }
 
     override function update(elapsed:Float) {
         if (FlxG.keys.justPressed.ESCAPE) {
+            #if sys
             Sys.exit(0);
+            #else
+            openSubState(new web.WebError('Escape key pressed. To use this application again,\nplease refresh the page.'));
+            #end
         }
         super.update(elapsed); // to ensure updates even if i dont list it here.
     }
@@ -74,6 +81,34 @@ class ForecastState extends FlxState {
     var at_areas:FlxText;
     var at_desc:FlxText;
     var at_headline:FlxText;
+    var at_until:FlxText;
+
+    function addNowUI() {
+        nowThing = new FlxUI(null, ForecastUI);
+        nowThing.name = 'Current';
+
+        var curWeather:ResponseCurrent = location.current; // to get the current conditions
+
+        var wxIcon:WeatherIcon = new WeatherIcon(15, 30, curWeather.condition.icon, SusUtil.getCurrentHour());
+
+        var condText:FlxText = new FlxText(wxIcon.x + 69, wxIcon.y, 0, curWeather.condition.text, 8);
+
+        if (LaunchState.temperatureUnits == 'F') {
+            var temperatureText:FlxText = new FlxText(wxIcon.x + 69, condText.y + 10, 0, curWeather.temp_f + '\u2109', 16);
+            var feelsLikeText:FlxText = new FlxText(temperatureText.x, temperatureText.y + 18, 0, curWeather.feelslike_f + '\u2109');
+            nowThing.add(temperatureText);
+            nowThing.add(feelsLikeText);
+        } else {
+            var temperatureText:FlxText = new FlxText(wxIcon.x + 69, condText.y + 10, 0, curWeather.temp_c + '\u2103');
+            var feelsLikeText:FlxText = new FlxText(temperatureText.x, temperatureText.y + 18, 0, curWeather.feelslike_c + '\u2103');
+            nowThing.add(temperatureText);
+            nowThing.add(feelsLikeText);
+        }
+
+        nowThing.add(wxIcon);
+        nowThing.add(condText);
+        ForecastUI.addGroup(nowThing);
+    }
     function addAlertUI() {
         alertThing = new FlxUI(null, ForecastUI);
         alertThing.name = 'Alerts';
@@ -85,11 +120,13 @@ class ForecastState extends FlxState {
 
         at_Event = new FlxText(alertDropDown.x, alertDropDown.y + 30, 0, 'Pick an alert first.', 12);
 
-        at_headline = new FlxText(at_Event.x, at_Event.y + 14, 0, 'Local ' + Sys.systemName() + ' user gets confused', 12);
+        at_headline = new FlxText(at_Event.x, at_Event.y + 14, 0, 'Local ' + #if sys Sys.systemName() #else 'browser' #end + ' user gets confused', 12);
 
         at_areas = new FlxText(at_Event.x, at_headline.y + 14, 0, 'N/A', 12);
 
-        at_desc = new FlxText(at_areas.x, at_areas.y + 14, 0, 'No description', 12);
+        at_desc = new FlxText(at_areas.x, at_areas.y + 28, 0, 'No description', 12);
+
+        at_until = new FlxText(at_areas.x, at_areas.y + 14, 0, 'Effective until you pick an alert.', 12);
 
         alertThing.add(new FlxText(alertDropDown.x, alertDropDown.y - 18, 0, 'Select an alert:', 8));
         alertThing.add(at_Event);
@@ -154,7 +191,7 @@ class ForecastState extends FlxState {
         dayThing = new FlxUI(null, ForecastUI);
         dayThing.name = 'Today';
 
-        var wxIcon:WeatherIcon = new WeatherIcon(15, 30, fc.day.condition.icon, SusUtil.getCurrentHour());
+        var wxIcon:WeatherIcon = new WeatherIcon(15, 30, fc.day.condition.icon, 12);
 
         var conditionText = new FlxText(wxIcon.x + 69, wxIcon.y + 10, 0, fc.day.condition.text, 8);
 
@@ -185,6 +222,8 @@ class ForecastState extends FlxState {
         at_desc.fieldWidth = 0;
         at_headline.text = alertValues[0];
         at_headline.fieldWidth = 0;
+        at_until.text = alertValues[10];
+        at_until.fieldWidth = 0;
     }
     function reloadAlertDropDown() {
         var droplist:Array<String> = [];
