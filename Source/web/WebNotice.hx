@@ -1,5 +1,5 @@
 package web;
-
+#if web
 import flixel.FlxG;
 import flixel.FlxSubState;
 import flixel.FlxSprite;
@@ -65,3 +65,14 @@ class WebNotice extends FlxSubState {
         }
     }
 }
+#else
+import SusUtil;
+
+class WebNotice extends FlxSubState {
+    public function new(msg:String) {
+        super();
+        FlxG.log.error('penis');
+        close();
+    }
+}
+#end
