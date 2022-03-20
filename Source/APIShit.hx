@@ -174,10 +174,12 @@ typedef WeatherCondition = {
     var code:Int;
 }
 class APIShit {
+    static inline final QUERY = '&q=';
+
     // GOTTA FIGURE IT OUT
     static inline final API_LINK = 'http://api.weatherapi.com/v1/';
     public static function getNow(Location:String) {
-        var weatherNow = Http.requestUrl(API_LINK + 'current.json?key=' + APIKey.WeatherKey + '&q=' + Location.replace(' ', '%20') + '&aqi=no');
+        var weatherNow = Http.requestUrl(API_LINK + 'current.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20') + '&aqi=no');
         trace(weatherNow);
         var curThing:ResponseBody = cast Json.parse(weatherNow);
         if (curThing.error != null) {
@@ -187,7 +189,7 @@ class APIShit {
     }
 
     public static function searchWeather(Location:String):Array<ResponseSearch> {
-        var sresult = Http.requestUrl(API_LINK + 'search.json?key=' + APIKey.WeatherKey + '&q=' + Location.replace(' ', '%20'));
+        var sresult = Http.requestUrl(API_LINK + 'search.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20'));
         //trace(sresult);
         if (sresult.length < 3) {
             SusUtil.API_Failure(1006);
@@ -196,7 +198,7 @@ class APIShit {
     }
 
     public static function getForecast(Location:String):ResponseForecast {
-        var forecast = Http.requestUrl(API_LINK + 'forecast.json?key=' + APIKey.WeatherKey + '&q=' + Location.replace(' ', '%20') + '&days=1&aqi=no&alerts=yes');
+        var forecast = Http.requestUrl(API_LINK + 'forecast.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20') + '&days=1&aqi=no&alerts=yes');
         var fc:ResponseForecast = cast Json.parse(forecast);
         /*if (fc.error != null) {
             SusUtil.API_Failure(fc.error.code);

@@ -17,3 +17,9 @@ Givin' credit where credit is due!
 This application is powered by [WeatherAPI.com](https://www.weatherapi.com/), a free Weather API.
 
 The FlxUIDropDownMenuCustom class was made by [larsiusprime](https://github.com/larsiusprime).
+
+# Feelin funny?
+
+Here's a lil fun fact: One of the commits during the v0.0.2 era (around March 2022) has a pretty sussy little easter egg. If you find that commit, compile it and send me a recording of you finding that easter egg on Twitter. You can find my Twitter on my [Carrd](https://devinpoggers.carrd.co)
+
+*Hint: Amogus*
