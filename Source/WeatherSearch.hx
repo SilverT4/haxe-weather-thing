@@ -12,6 +12,7 @@ import FlxUIDropDownMenuCustom;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUI;
 import flixel.ui.FlxButton;
+import Eduardo;
 
 using StringTools;
 /** This substate provides a list of results from search
@@ -25,6 +26,7 @@ class WeatherSearch extends FlxSubState {
     var locations:Array<ResponseSearch> = [];
     var DEST_ON_SEVEN:Array<Dynamic> = [];
     var blockInputWhileTyping:Array<FlxUIInputText> = [];
+    var ed:Eduardo;
     public function new() {
         super();
     }
@@ -40,6 +42,16 @@ class WeatherSearch extends FlxSubState {
         add(SearchUI);
         DEST_ON_SEVEN.push(SearchUI);
         setupSearchUI();
+        ed = new Eduardo(0, 0);
+        ed.visible = false;
+        add(ed);
+
+        if (ForecastState.location != null) {
+            var exitButton = new FlxButton(0, 69, 'Exit', function() {
+                close();
+            });
+            add(exitButton);
+        }
     }
     var blockInput:Bool = false;
     var curBlocker:Dynamic = null;
@@ -68,6 +80,15 @@ class WeatherSearch extends FlxSubState {
                     blockInput = false;
                     curBlocker = null;
                 }
+            }
+        }
+
+        if (ed != null) {
+            ed.update(elapsed);
+            ed.dance();
+            if (FlxG.keys.justPressed.L && !blockInput) {
+                ed.visible = true;
+                ed.jumpscare();
             }
         }
 
