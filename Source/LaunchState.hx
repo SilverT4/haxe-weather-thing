@@ -52,6 +52,12 @@ class LaunchState extends FlxState {
         }
         #end
 
+        #if (web && debug)
+        if (FlxG.keys.justPressed.L) {
+            openSubState(new web.WebError('amogus'));
+        }
+        #end
+
         super.update(elapsed);
     }
     override function create() {
@@ -75,9 +81,13 @@ class LaunchState extends FlxState {
         //SusUtil.getWeatherIcon('night/420.png');
         new FlxTimer().start(3, function(tmr:FlxTimer) {
             if (!FlxG.save.data.finishedSetup) FlxG.switchState(new InitialSetup()) else {
-                temperatureUnits = FlxG.save.data.tempUnits[0];
-                windUnits = FlxG.save.data.tempUnits[1];
-                openSubState(new WeatherSearch());
+                if (FlxG.save.data.tempUnits != null) {
+                    temperatureUnits = FlxG.save.data.tempUnits[0];
+                    windUnits = FlxG.save.data.tempUnits[1];
+                    openSubState(new WeatherSearch());
+                } else {
+                    SusUtil.API_Failure(-999);
+                }
             }
         });
     }
