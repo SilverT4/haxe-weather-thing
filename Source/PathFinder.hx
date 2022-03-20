@@ -3,27 +3,35 @@ package;
 import haxe.Json;
 import SusUtil;
 import PogTools;
-import sys.FileSystem;
+//import sys.FileSystem;
 import flixel.graphics.frames.FlxAtlasFrames as FunnyFrames;
+#if web
+import openfl.utils.Assets;
+#else
+import sys.FileSystem;
+#end
 using StringTools;
 
 /**Simple class to get certain files and check the existence of them as well.
 @since v0.0.2*/
 class PathFinder {
+    static inline final ERROR_404 = 'not found';
+
     static inline final AudioPath = 'Assets/Sounds/';
     static inline final IconPath = 'Assets/Icons/';
     static inline final WxIconPath_Day = 'Assets/Icons/weather/64x64/day/';
     static inline final WxIconPath_Night = 'Assets/Icons/weather/64x64/night/';
     static inline final ImagePath = 'Assets/Images/';
+    static inline final PlaceholderPath = 'Assets/Placeholders/';
     static inline final AudioExt = #if web '.mp3' #else '.ogg' #end;
     /**Grabs a weather icon if you have the direct path to it in the application's files.
         @param key Path to the icon
         @returns key if the file exists, 'not found' if it does not.
         @since v0.0.2*/
     public static function iconDirect(key:String):String {
-        if (FileSystem.exists(key + '.png')) 
+        if (exists(key + '.png')) 
             return key + '.png';
-        return 'not found';
+        return ERROR_404;
     }
     /**Grab a sound effect to play. This function is planned to be used in ForecastState in case of certain severe weather alerts.
         @param key Sound file name.
@@ -36,7 +44,7 @@ class PathFinder {
         } else {
             if (exists(AudioPath + key + AudioExt)) return AudioPath + key + AudioExt;
         }
-        return 'not found';
+        return ERROR_404;
     }
     /**If you want to pull a funny prank, just create a louder version of an existing sound and use this function to play it.*/
     public static function loud_sound(key:String, ?directPath:String) {
@@ -45,7 +53,7 @@ class PathFinder {
         } else {
             if (exists(AudioPath + key + '-loud' + AudioExt)) return AudioPath + key + '-loud' + AudioExt;
         }
-        return 'not found';
+        return ERROR_404;
     }
     /**Grab an image (not icon).
         @param key Image filename.
@@ -58,9 +66,21 @@ class PathFinder {
         } else {
             if (exists(ImagePath + key + '.png')) return ImagePath + key + '.png';
         }
-        return 'not found';
+        return ERROR_404;
     }
-
+    /**Grab a placeholder JSON to prevent the application from crashing due to a null object reference.
+        @param key The placeholder file name.
+        @param directPath The placeholder's direct path (just the path leading up, don't add the file name!)
+        @returns The JSON if it exists, otherwise returns 'not found'
+        @since v0.0.2*/
+    public static function getPlaceholder(key:String, ?directPath:String) {
+        if (directPath != null) {
+            if (exists(directPath + key + '.json')) return directPath + key + '.json';
+        } else {
+            if (exists(PlaceholderPath + key + '.json')) return PlaceholderPath + key + '.json';
+        }
+        return ERROR_404;
+    }
     /**Grabs the correct icon for the WeatherIcon class.
         @param icon Icon.png file
         @param variant Day or night
@@ -75,7 +95,7 @@ class PathFinder {
             if (heh[i].contains('.png')) icname = heh[i];
         }
         if (exists(icpath + icname)) return icpath + icname;
-        return 'not found';
+        return ERROR_404;
     }
     /**Get the Sparrow atlas of a spritesheet.
         @param key The file name. This is used for both the png and xml files.
@@ -87,14 +107,18 @@ class PathFinder {
         } else {
             if (exists(ImagePath + key + '.png') && exists(ImagePath + key + '.xml')) return FunnyFrames.fromSparrow(PathFinder.image(key), ImagePath + key + '.xml');
         }
-        return FunnyFrames.fromSparrow('Assets/Images/speen.png', 'Assets/Images/speen.xml');
+        return FunnyFrames.fromSparrow('Assets/Images/speen.png', 'Assets/Images/speen.xml'); // Placeholder in case the file requested is not found!
     }
     /**Check if a file exists.
         @param key Path to a file.
         @returns true if it exists, false if it does not.
         @since v0.0.2*/
     public static function exists(key:String) {
+        #if sys
         if (FileSystem.exists(key)) return true;
+        #else
+        if (Assets.exists(key)) return true;
+        #end
         else return false;
     }
 }
