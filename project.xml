@@ -3,6 +3,7 @@
 	
 	<meta title="HaxeFlixel Weather Thing" package="dumb.devin503.weather" version="0.0.3" company="devin503" />
 	<app main="Main" path="Export" file="FlxWeather" />
+	<app preloader="flixel.system.FlxPreloader" />
 	
 	<source path="Source" />
 	
@@ -14,8 +15,11 @@
 	<haxelib name="weatherapi-hx" />
 	
 	
-	<assets path="Assets" exclude="*.ogg *.md" if="web" />
-	<assets path="Assets" exclude="*.mp3 *.md" unless="web" />
+	<assets path="Assets/Sounds/Web/" rename="Assets/Sounds/" if="web" />
+	<assets path="Assets/Sounds/Sys/" rename="Assets/Sounds/" if="sys" />
+	<assets path="Assets/Icons" exclude="*.md" />
+	<assets path="Assets/Images" exclude="Eduardo.*" if="web" />
+	<assets path="Assets/Placeholders" exclude="*.md" />
 
 	<haxedef name="WINDUSSY" if="debug windows" /> <!-- remind me why i did this -->
 
