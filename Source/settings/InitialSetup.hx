@@ -27,13 +27,16 @@ class InitialSetup extends FlxState {
     var needSwitch:Bool = false;
     var jej:FlxText; // intro text stuff
     var hintText:FlxText;
+    #if web
+    var NextButton:FlxButton;
+    #end
 
     public function new() {
         super();
     }
 
     override function create() {
-        #if desktop FlxG.sound.playMusic(PathFinder.sound('funnyinst'), 0.8); #end
+        FlxG.sound.playMusic(PathFinder.sound('funnyinst'), 0.8);
         var bg = new FlxSprite(0);
         bg.loadGraphic(PathFinder.image('rainBgDesat'));
         bg.setGraphicSize(Std.int(bg.width * 1.25));
@@ -50,10 +53,28 @@ class InitialSetup extends FlxState {
         jej.setFormat(null, 16, 0xFFFFFFFF, CENTER);
         jej.screenCenter();
         add(jej);
+        #if web
+        NextButton = new FlxButton(FlxG.width - 100, FlxG.height - 26, 'Next', doNext_Web);
+        add(NextButton);
+        #end
 
         hintText = new FlxText(0, FlxG.height - 14, 0, 'Press ENTER to continue', 12);
         add(hintText);
     }
+
+    #if web
+    function doNext_Web() {
+        if (curStep != 2) {
+            curStep += 1;
+            switchScreen(curStep);
+        } else {
+            trace('oops');
+            FlxG.sound.play(PathFinder.sound('fart'));
+            hintText.text = 'Please use the OK button here!';
+            NextButton.kill();
+        }
+    }
+    #end
 
     override function update(elapsed:Float) {
         if (FlxG.keys.justPressed.ENTER && curStep != 2) {
@@ -72,7 +93,11 @@ class InitialSetup extends FlxState {
             FlxG.sound.music.fadeOut(1.5, 0, function(twn:flixel.tweens.FlxTween) {
                 trace('pp');
                 FlxG.save.flush();
+                #if sys
                 Sys.exit(0);
+                #else
+                openSubState(new web.WebError('Initial setup has been completed, please refresh the page.'));
+                #end
             });
         }
 
@@ -138,6 +163,9 @@ class InitialSetup extends FlxState {
     function explainSearchScreen() {
         jej.revive();
         unitDrop.kill();
+        #if web
+        NextButton.revive();
+        #end
         hintText.text = 'Press ENTER to continue';
 
         jej.text = 'Now let me explain the search screen. When you launch this application after completing this\ninitial setup, a substate will open with an input box, two buttons, and a dropdown.\n\nIn the input box, replace the text with a location and click Search. The app will freeze for a\nmoment while it searches for locations matching your input.\n\nThe drop down will contain a list of results. Use it to select your location, then click go.';
