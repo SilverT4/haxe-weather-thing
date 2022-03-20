@@ -16,6 +16,7 @@
 	<assets path="Assets" />
 	<assets path="Assets/Sounds" exclude="*.ogg" if="web" />
 	<assets path="Assets/Sounds" exclude="*.mp3" unless="web" />
+	<assets path="Assets" exclude="*.md" /> <!-- i dont need it -->
 
 	<haxedef name="WINDUSSY" if="debug windows" /> <!-- remind me why i did this -->
 
