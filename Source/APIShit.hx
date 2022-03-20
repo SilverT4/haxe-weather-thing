@@ -183,7 +183,7 @@ class APIShit {
     static inline final API_LINK = 'http://api.weatherapi.com/v1/';
     static var lonker:URLLoader;
     static function getFromURL(URL:String) {
-        lonker = new URLLoader();
+        lonker = new URLLoader(new URLRequest(URL));
         #if sys
         return Http.requestUrl(URL);
         #else
