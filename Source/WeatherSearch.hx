@@ -13,7 +13,7 @@ import FlxUIDropDownMenuCustom;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUI;
 import flixel.ui.FlxButton;
-import Eduardo;
+#if !web import Eduardo; #end
 
 using StringTools;
 /** This substate provides a list of results from search
@@ -27,7 +27,7 @@ class WeatherSearch extends FlxSubState {
     var locations:Array<ResponseSearch> = [];
     var DEST_ON_SEVEN:Array<Dynamic> = [];
     var blockInputWhileTyping:Array<FlxUIInputText> = [];
-    var ed:Eduardo;
+    #if !web var ed:Eduardo; #end
     public static var instance:WeatherSearch;
     public function new() {
         super();
@@ -49,11 +49,13 @@ class WeatherSearch extends FlxSubState {
         add(SearchUI);
         DEST_ON_SEVEN.push(SearchUI);
         setupSearchUI();
+        #if !web
         ed = new Eduardo(0, 0);
         //ed.visible = false;
         ed.dance();
         add(ed);
         trace(ed);
+        #end
 
         if (ForecastState.location != null) {
             var exitButton = new FlxButton(0, 69, 'Exit', function() {
@@ -93,7 +95,7 @@ class WeatherSearch extends FlxSubState {
                 }
             }
         }
-
+        #if !web
         if (ed != null) {
             ed.update(elapsed);
             if (ed.animation.curAnim.finished) ed.dance();
@@ -109,6 +111,7 @@ class WeatherSearch extends FlxSubState {
                 trace('you have been well well well\'d');
             });
         }
+        #end
 
         if (!blockInput) {
             if (FlxG.sound.volumeUpKeys == null) {
@@ -162,9 +165,13 @@ class WeatherSearch extends FlxSubState {
     }
 
     function openForecastState() {
-        ForecastState.location = forecastLocation;
+        if (forecastLocation != null) {
+            ForecastState.location = forecastLocation;
+        } else {
+            ForecastState.location = SusUtil.placeholderForecast(); // so we have a placeholder
+        }
         _parentState.persistentUpdate = false; // so speen stops
-        #if debug
+        #if WINDUSSY
         trace(haxe.Json.stringify(forecastLocation, "\t"));
         Clipboard.text = haxe.Json.stringify(forecastLocation, "\t"); // made this debug so it doesnt just copy on release builds
         #end
@@ -177,7 +184,7 @@ class WeatherSearch extends FlxSubState {
             locations.push(results[i]);
             //trace(locations);
         }
-        forecastLocation = APIShit.getForecast(locations[0].name + ', ' + locations[0].region);
+        if (locations.length > 0) forecastLocation = APIShit.getForecast(locations[0].name + ', ' + locations[0].region);
         if (results.length >= 3) reloadDropDown();
     }
 
