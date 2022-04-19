@@ -1,0 +1,87 @@
+package;
+
+class LiterallyTheEntireFNAFLore {
+    public static function getLoreLmao() {
+        var loreDialogueThingy = {
+            dialogue: []
+        }
+        var loreLong = "Players can get some of the earliest glimpses into the pizzeria's history through the minigames in each of the main titles.\nBefore being called Freddy Fazbear's Pizza, the first restaurant was called Fredbear's Family Diner. Two men opened the original restaurant and its several rebrandings as co-owners: William Afton and Henry Emily.\nTheir restaurant's concept was to create a special place for children's birthday parties.\nWhile mostly serving pizza and cake, the thing that made this restaurant chain special was their \"animatronic\" wait staff and entertainment. Originally, they were unable to create animatronics.\nSo, instead, they crafted two spring-lock suits that they or their staff could wear to appear as animatronics or place on a stage to perform.\nTheir names were Springbonnie and Fredbear.\nThe concept for the business did so well that they ended up creating a second location:\nFreddy Fazbear's Pizza.\nWithin this new location, four new animatronics were created and adored. They were Freddy, Bonnie, Chica, and Foxy. William Afton would use his success and the spring-lock suits to act on his cruel and abusive thoughts toward the children who flocked to his restaurant, specifically the five children at the birthday party that he murdered after luring them into the backrooms with the spring-lock Bonnie suit.
+        
+        To cover up his sick actions, he made all of the suits fully automated but still hollow enough for children to fit inside. Once they were all automated, he placed the children's bodies within them to discard the evidence—placing the children's souls within each of the animatronics. With no bodies or evidence, no charges could be pressed against William Afton. However, the missing children's case eventually caused the second location to close.
+        
+        After the closing of the second establishment and Afton's growing interest in capturing children, William created another sister location, based on his new animatronic, Circus Baby. This location, Circus Baby's Pizza World, was only owned by Afton but served the same basic concept. Circus Baby was made specifically to draw children to her by acting child-like. She could blow up helium balloons, dispense ice cream, and use her claw to grab children and stuff them inside of her.
+        
+        Circus Baby was specifically designed for trapping and killing children when she was alone with them in a one-on-one situation. Despite being a despicable man, Afton had a family—two sons and a daughter. He actively kept his children away from animatronics, such as Circus Baby, to keep them safe. However, Circus Baby's design was too entrancing to his youngest, Elizabeth, and she was consumed by the animatronic. Circus Baby became aware of the soul of Elizabeth inside her. After losing his daughter to his creation, he shut down the sister location immediately.
+        
+        As players likely noticed, the fourth main title within the series is quite different from previous versions of the game. Instead of playing as a new hire within the facility to work nights and watch after the animatronics, players are a child who is haunted at night by the animatronics. This child is Evan Afton, the youngest son of William Afton.
+        
+        After losing his only daughter to Circus Baby, William chose to scare his youngest son away from the animatronics using a frequency that would cause his son to hallucinate. During these hallucinations, Evan would believe that the animatronics from the restaurant were within his home and trying to reach his room and eat him.
+        
+        On top of this, William encouraged his older teenage son, Michael, to bully Evan and regularly scare him with a Foxy mask. However, Michael purely chose to bully Evan out of his malicious intent and ended up bullying Evan inside the diner for his birthday party. He gets his friends to help him do this and pushes Evan into the mouth of an on-stage animatronic to truly scare him. Due to the design of the spring-lock animatronic, Evan's tears caused the suit to fail and crush him inside the mouth.
+        
+        The suit had crushed Evan's head, and after heading to the hospital, he was put into a coma to be stabilized. This would not last, however, and Evan ended up dying in his coma. Despite all the work that William had done to keep Evan from being killed by any of his animatronics, he failed to reign in Michael and inadvertently caused his eventual death. After losing a second child to the animatronics, the original diner closed, and William descended into madness.
+        
+        William leaves Fazbear Entertainment, and Henry is left to solve all the problems in his stead. As he isn't the inventor of the animatronics and knows how many issues there are with the spring-lock suits, there are a lot of problems for him to sort out. He hires a full team to work out all of the previous issues and create a new name within Fazbear Entertainment.
+        
+        This included stocking the old animatronics in a backroom and creating the new and improved "toy" versions of Freddy, Chica, Bonnie, and Foxy. They also added a couple of new animatronics into the mix, like Balloon Boy. As an extra added security feature, Henry gave the animatronics facial recognition systems, specifically meant to spot and remove William if he ever returned. Later, he created the Puppet animatronic to protect his daughter, Charlie, as he was nervous about bringing her to the new establishment, Junior Freddy Fazbear's Pizzeria.
+        
+        After the death of Evan, everything went downhill for William. His wife became unstable and left, while he berated and blamed Michael for Evan's death. William went back to the closed original Fazbear's and destroyed the spring-lock suit that had crushed Evan before placing Evan's body inside the suit to try and put him back together. Upon hearing about the grand opening of a new Fazbear's, he immediately drove there.
+        
+        Security stopped him from entering, and he was met by Henry, who heatedly asked him to leave and reminded him that it was his fault that all the children died in the previous restaurant. Angered by this, Afton left, making plans to get his revenge on the co-owner of Fazbear Entertainment. He chooses to go after Henry's daughter, Charlie.
+        
+        Afton kept the Puppet animatronic from being able to watch out for Charlie by locking his container. Because it was stuck closed, Charlie ended up being stuck just outside the restaurant long enough for William to take his revenge. The Puppet animatronic was eventually able to break free of his box to try to rescue Charlie, but it was too late, and as the rain was heavy that night, it broke down beside her in the alleyway.
+        
+        With the loss of Charlie, the Puppet began giving life to the children who were murdered within the pizzeria. However, these reanimated versions didn't appear in the old animatronics. Instead, they were hosted within the new "toy" versions.
+        
+        Customers didn't notice, as the reanimated versions still acted the way they were supposed to during their working hours. The children within the animatronics simply gained a new motive: to find their killer. This is what causes their odd behavior at night, as they are trying to reach the security office to make sure Afton isn't in the building.
+        
+        However, the unruly kids that came to play at Fazbear's repeatedly ripped Mangle apart. After one too many times, Mangle bit the child who was tearing it apart, and the child lost part of their frontal lobe. This caused the company to scrap all of the animatronics, except for the Puppet, to ensure the safety of all children.
+        
+        After arguing with and murdering his wife, William begins crafting three new animatronics: Playtime Freddy, Playtime Foxy, and Ballora. Ballora is the only completely new design, a ballerina animatronic containing his wife's body. Together with the original Circus Baby, he had a full staff to create a new location; Circus Baby's Entertainment & Rentals.
+        
+        Due to both creators of the animatronics reusing the original endoskeletons of the old models, the new creations were still possessed by the victims of William Afton. Over time, Afton eventually realized this and decided that he had to destroy the animatronics all over again. One by one he took each of them down. Overjoyed at his victory, he put on the Springbonnie suit once more to celebrate. Forgetting the fatal flaw of the suit, he ignored the rain dribbling through the open-air part of the backrooms and the suit crushes him nearly to death.
+        
+        Henry witnesses Afton's assumed death but tells no one, instead, locking off all entrances into the backrooms and trying his best to cover up the beaten animatronics. With all of his attempts and failures to keep Junior Freddy Fazbear's Pizza open and safe, he finally decides to close the facility for good.
+        
+        After the mysterious disappearance of Michael's father, Michael decides to disguise himself as a technician and go work at his father's newest facility, Circus Baby's Entertainment & Rentals. With the technician cover, Michael was able to get up close with the animatronics and fully explore the place. Through his exploration, he mainly spoke with Circus Baby, who tried to give him the information he sought.
+        
+        She brought him into the scooping room, where the animatronics are emptied of their endoskeletons and anything else hidden inside of them. Circus Baby made sure that Michael saw Ballora be opened, the animatronic his mother was placed inside of.
+        
+        Michael didn't realize what exactly Circus Baby was showing him, but he knew there had to be something important about Ballora. After making an unanswered call to his mother, he returned to Circus Baby's Entertainment & Rentals one final time.
+        
+        Unannounced to Michael, Circus Baby and the rest of the animatronics wished to leave the facility. They knew that as their endoskeletal and suited form, they would be recognized and stopped. So as a last resort, they bound themselves together and scooped Michael out to use his skin as a new suit. With this, they successfully fled the facility and began the search to destroy William.
+        
+        Over time, the amalgamation of animatronics called Ennard that entered Micheal's body struggled to deal with Circus Baby and pushed her out. Both rebuilt themselves, becoming Scrap Baby and Molten Freddy. Somehow after 30 years of this, Micheal was somewhat alive.
+        
+        During this time a new horror attraction is born; Fazbear's Fright. Unfortunately, in doing their research, the people building the attraction went through the shutdown diners and found Scraptrap or William Afton within his suit. He became their main feature to roam the new attraction.
+        
+        Michael hears of the newest attraction and recognizes his father within Scraptrap. Knowing what he needs to do, he travels to the attraction and starts a fire that traps and engulfs the "animatronic." This brought peace to the spirits of the five children, who were inhabiting the various suits. Allowing them to be free and finish their original birthday party from over 30 years ago. However, Charlie, or the Puppet, and Golden Freddy, or Evan Afton, stayed behind to ensure that William and everything he had done was fixed.
+        
+        Henry Emily now knowledgeable of all the evil deeds that William had committed, wanted one thing; to nullify William's actions. In order to do this, he creates a new location to draw back all of the lost souls/animatronics called Freddy Fazbear's Pizza Place and hires a manager to do all of the stagings and set up for the business.
+        
+        This brought Michael, Scrap Baby, L.E.F.T.Y., Molten Freddy, and William back to the scene, drawn by different things. Henry planned for all of them to meet at a big event held at the Pizza Place on Saturday. During this "party" each of the animatronics were let to freely do as they wished within the dining facility, where they all turned on one another. Then Henry spoke over the intercom to interrupt their fight and leave them with a few final words.
+        
+        With this final speech, Henry Emily burns down this establishment with himself, the manager, and all the animatronics trapped inside. This fire releases all but one spirit. The spirit of Evan, within Golden Freddy. It wasn't until he'd replayed everything he had been through for another 20 years that he would finally choose to let go.
+        
+        After the death of both original founders and the original animatronics, Fazbear Entertainment was officially taken over by new businessmen to make something of the franchise. They hired an indie game developer to create a series of games to remove the dark rumors floating around their franchise. Within the game development team, Vanessa arrived.
+        
+        While developing this new series of VR games they decided to upload some of the old animatronics' coding into the game, creating the "Anomaly." A creature that would appear in-game and specifically talk to one person within the team; Jeremy. Jeremy became overwhelmed with the anomaly, and with no one at the company listening to him, committed suicide while at work.
+        
+        Vanessa happens to overhear the higher-ups talking about how this suicide will make the company look worse for an upcoming court date. When she tries to confront them on all of this information she is forced to playtest the game, taking on Jeremy's job.
+        
+        Vanessa records logs of the anomaly within the game, unknowingly allowing Glitchtrap to attach himself to the code of these undeletable files. She tries to break apart the files to keep Glitchtrap broken apart, but instead, he invades her mind. Keeping himself alive within her mind.
+        
+        Vanessa gains a split personality and creates a bunny suit to wear when Glitchtrap comes out. While reluctant to do so, she follows Glitchtrap's instructions to resurrect Scraptrap a.k.a. William Afton. Shortly after this, Freddy Fazbear's Mega Pizzaplex opens and Vanessa becomes a security guard there.
+        
+        During Vanessa's time at the Pizzaplex, she tries to find more ways to bring back the remnant of Scraptrap with the technology housed there and murders children caught in the complex after hours. Throughout this time, she visits a therapist to try and fix her mind. The therapist discovers encrypted threatening messages from someone online who is manipulating her. However, Vanny stops each therapist once they are too close to discovering the truth and murders them.
+        
+        Later during one of Freddy's performances, something tries to infect his code and causes him to shut down. When he reawakens, Gregory is inside his stomach hatch. This is the start of Five Nights at Freddy's: Security Breach. Throughout the game, Gregory damages each of the main animatronics in order to upgrade Freddy into the best animatronic. Despite all of their work together, Freddy cannot escape with Gregory once the doors reopen in the morning.
+        
+        They travel together underground to find Freddy Fazbear's Pizza Place, where all the original souls had been put to rest. Freddy mentions that Vanny has brought him here before and that she made him realize he wasn't himself. Through the power of the charging stations, Vanny reconstructed Scraptrap's body and transferred William's data to the animatronic from Glitchtrap.
+        
+        Over the time of the mall's construction, Fazbear Entertainment had been throwing all of the old haunted animatronics down here, which were slowly building into a new amalgamation. When the amalgamation witnesses the rebirth of William via Scraptrap, it takes him down, allowing Freddy and Gregory to leave and the spirits to be at rest again.
+        
+        And that is the entire fnaf lore."
+        var daLore:Array<String> = [];
+    }
+}
