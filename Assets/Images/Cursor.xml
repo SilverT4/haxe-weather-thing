@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="cursor bullshit.png">
+	<!-- Created with Adobe Animate version 20.5.0.29329 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="ACTIVE CURSOR0000" x="1" y="1" width="18" height="24"/>
+	<SubTexture name="IDLE CURSOR0000" x="21" y="1" width="14" height="19"/>
+	<SubTexture name="TEXT CURSOR0000" x="37" y="1" width="9" height="18"/>
+</TextureAtlas>
