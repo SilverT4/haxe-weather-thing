@@ -1,11 +1,14 @@
 package;
 
+import flixel.FlxG;
+import web.WebNotice;
 import haxe.Json;
 #if sys
 import sys.Http;
 #else
-import openfl.net.URLLoader;
-import openfl.net.URLRequest;
+import haxe.http.*;
+import tink.CoreApi;
+import flixel.util.FlxTimer;
 #end
 import APIKey;
 
@@ -40,6 +43,7 @@ typedef ResponseForecast = {
     var location:ResponseLocation;
 }
 typedef WeatherAlertArray = {
+    /**An array of `WeatherAlert` objects. If the length of this array `>=` 1, the alerts will be displayed in the Forecast state.*/
     var alert:Array<WeatherAlert>;
 }
 
@@ -180,20 +184,34 @@ class APIShit {
     static inline final QUERY = '&q=';
     
     // GOTTA FIGURE IT OUT
-    static inline final API_LINK = 'http://api.weatherapi.com/v1/';
-    static var lonker:URLLoader;
+    static inline final API_LINK = 'https://api.weatherapi.com/v1/';
+    #if sys
     static function getFromURL(URL:String) {
-        lonker = new URLLoader(new URLRequest(URL));
-        #if sys
         return Http.requestUrl(URL);
-        #else
-        lonker.load(new URLRequest(URL));
-        return lonker.data;
-        lonker = null;
-        #end
     }
+    #else
+    static var dumb:Dynamic;
+    static var lonker = new HttpJs(API_LINK);
+
+    static function getFromURL(kind:String, query:String, ?additional:Map<String, String>) {
+        var poopy = ["key" => APIKey.WeatherKey, "q" => query];
+        if (additional != null) {
+            for (e => a in additional) {
+                poopy.set(e, a);
+            }
+        }
+        return DumbLink.requestUrl(API_LINK + '$kind.json', poopy);
+    }
+
+    static function doCallback(sus:String) {
+        dumb = sus;
+        trace(sus);
+    }
+    #end
     public static function getNow(Location:String) {
-        var weatherNow = getFromURL(API_LINK + 'current.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20') + '&aqi=no');
+        var weatherNow = #if sys getFromURL(API_LINK + 'current.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20') + '&aqi=no') #else getFromURL('current', Location.replace(' ', '%20'), null) #end;
+        //
+            //var weatherNow = dumb;
         trace(weatherNow);
         var curThing:ResponseBody = cast Json.parse(weatherNow);
         if (curThing.error != null) {
@@ -203,16 +221,22 @@ class APIShit {
     }
     
     public static function searchWeather(Location:String):Array<ResponseSearch> {
-        var sresult = getFromURL(API_LINK + 'search.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20'));
-        //trace(sresult);
+        var sresult = #if sys getFromURL(API_LINK + 'search.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20')) #else getFromURL("search", Location.replace(' ', '%20'), null) #end;
+            trace(sresult);
+        //flixel.FlxG.state.subState.openSubState(new web.WebNotice(sresult));
         if (sresult.length < 3) {
             SusUtil.API_Failure(1006);
+        } else if (sresult == null) {
+            #if debug
+            flixel.FlxG.log.error('Search results returned null.');
+            #end
+            SusUtil.API_Failure(-342);
         }
         return cast Json.parse(sresult);
     }
     
     public static function getForecast(Location:String):ResponseForecast {
-        var forecast = getFromURL(API_LINK + 'forecast.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20') + '&days=1&aqi=no&alerts=yes');
+        var forecast = #if sys getFromURL(API_LINK + 'forecast.json?key=' + APIKey.WeatherKey + QUERY + Location.replace(' ', '%20') + '&days=1&aqi=no&alerts=yes') #else getFromURL('forecast', Location.replace(' ', '%20'), ["days" => "1", "aqi" => "no", "alerts" => "yes"]) #end;
         var fc:ResponseForecast = cast Json.parse(forecast);
         /*if (fc.error != null) {
             SusUtil.API_Failure(fc.error.code);
