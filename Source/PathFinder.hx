@@ -5,7 +5,7 @@ import SusUtil;
 import PogTools;
 //import sys.FileSystem;
 import flixel.graphics.frames.FlxAtlasFrames as FunnyFrames;
-#if web
+#if !sys
 import openfl.utils.Assets;
 #else
 import sys.FileSystem;
@@ -17,13 +17,14 @@ using StringTools;
 class PathFinder {
     static inline final ERROR_404 = 'not found';
 
-    static inline final AudioPath = 'Assets/Sounds/'; // fuck
-    static inline final IconPath = 'Assets/Icons/';
-    static inline final WxIconPath_Day = 'Assets/Icons/weather/64x64/day/';
-    static inline final WxIconPath_Night = 'Assets/Icons/weather/64x64/night/';
-    static inline final ImagePath = 'Assets/Images/';
-    static inline final PlaceholderPath = 'Assets/Placeholders/';
-    static inline final AudioExt = #if web '.mp3' #else '.ogg' #end;
+    static #if !ios inline #end final AudioPath = #if ios lime.system.System.applicationStorageDirectory+'Contents/Resources/'+#end'Assets/Sounds/'; // fuck
+    static #if !ios inline #end final IconPath = #if ios lime.system.System.applicationStorageDirectory+'Contents/Resources/'+#end'Assets/Icons/';
+    static #if !ios inline #end final WxIconPath_Day = #if ios lime.system.System.applicationStorageDirectory+'Contents/Resources/'+#end'Assets/Icons/weather/64x64/day/';
+    static #if !ios inline #end final WxIconPath_Night = #if ios lime.system.System.applicationStorageDirectory+'Contents/Resources/'+#end'Assets/Icons/weather/64x64/night/';
+    static #if !ios inline #end final ImagePath = #if ios lime.system.System.applicationStorageDirectory+'Contents/Resources/'+#end'Assets/Images/';
+    static #if !ios inline #end final PlaceholderPath = #if ios lime.system.System.applicationStorageDirectory+'Contents/Resources/'+#end'Assets/Placeholders/';
+    static #if !ios inline #end final AudioExt = #if web '.mp3' #else '.ogg' #end;
+    static #if !ios inline #end final MusicPath = #if ios lime.system.System.applicationStorageDirectory+'Contents/Resources/'+#end'Assets/Music/'; // fuck
     /**Grabs a weather icon if you have the direct path to it in the application's files.
         @param key Path to the icon
         @returns key if the file exists, 'not found' if it does not.
@@ -45,6 +46,13 @@ class PathFinder {
             if (exists(AudioPath + key + AudioExt)) return AudioPath + key + AudioExt;
         }
         return ERROR_404;
+    }
+    /**Grab a music file from the Music directory
+        @since v0.0.3*/
+    public static function music(key:String) {
+        var pee = key + AudioExt;
+        if (exists(MusicPath + pee)) return MusicPath + pee;
+        else return ERROR_404;
     }
     /**If you want to pull a funny prank, just create a louder version of an existing sound and use this function to play it.*/
     public static function loud_sound(key:String, ?directPath:String) {
@@ -109,11 +117,24 @@ class PathFinder {
         }
         return FunnyFrames.fromSparrow('Assets/Images/speen.png', 'Assets/Images/speen.xml'); // Placeholder in case the file requested is not found!
     }
+    /**
+        Grab a font. Fonts must be in Assets/Fonts **when you compile** at the moment.
+        @param key Font path
+        @returns Font if it exists, 'Monsterrat' if not (as a means of having a placeholder)
+        @since v0.0.3*/
+    public static function font(key:String) {
+        if (exists('Assets/Fonts/' + key)) return 'Assets/Fonts/' + key;
+        return 'Monsterrat';
+    }
     /**Check if a file exists.
         @param key Path to a file.
         @returns true if it exists, false if it does not.
         @since v0.0.2*/
     public static function exists(key:String) {
+        #if debug
+        flixel.FlxG.log.add(key);
+        //flixel.FlxG.log.add(Assets.list());
+        #end
         #if sys
         if (FileSystem.exists(key)) return true;
         #else
