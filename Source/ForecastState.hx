@@ -5,6 +5,7 @@ import APIShit;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.FlxSprite;
+import flixel.FlxCamera;
 import PogTools;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUI;
@@ -13,11 +14,13 @@ import flixel.util.FlxTimer;
 import flixel.text.FlxText;
 import FlxUIDropDownMenuCustom;
 import util.WeatherIcon;
+using StringTools;
 
 class ForecastState extends FlxState {
     public static var location:ResponseForecast;
     var fc:ForecastThing;
-    static var severeEvents:Array<String> = ['Tornado Warning', 'Hurricane Warning', 'Tropical Storm Warning', 'Flash Flood Warning', 'Flood Warning', 'Sus Warning']; // to start just these
+    static var severeEvents:Array<String> = ['Tornado Warning', 'Hurricane Warning', 'Tropical Storm Warning', 'Flash Flood Warning', 'Flood Warning', 'Civil Danger Warning', 'Sus Warning']; // to start just these
+    static var MUST_OPEN_GOOGLE:String = "Emergency Action Notification";
     var astronomy:Array<String> = [];
     var alertEvents:Array<String> = [];
     var weatherAlerts:Array<WeatherAlert> = [];
@@ -27,6 +30,8 @@ class ForecastState extends FlxState {
     var dayThing:FlxUI;
     var hourThing:FlxUI;
     var nowThing:FlxUI;
+    var mouseCam:FlxCamera;
+    var daMouse:CustomMouseCursor;
     var alertCount:Int = 0;
     public function new () {
         super();
@@ -42,7 +47,25 @@ class ForecastState extends FlxState {
         }
     }
 
+    function makeBackgroundShit() {
+        var dumbShit = flixel.util.FlxColor.gradient(0xFF000000, PogTools.domColor(new WeatherIcon(-64, -64, location.current.condition.icon, SusUtil.getCurrentHour())), Std.int(FlxG.height));
+        var shitass = Std.int(FlxG.height);
+        for (speedrun in 0...shitass) {
+            trace("HEY SHITASS, WANNA SEE ME SPEEDRUN?? ATTEMPT #" + (speedrun + 1));
+            var attempt = new FlxSprite(0, speedrun);
+            attempt.makeGraphic(FlxG.width, 1, dumbShit[speedrun]);
+            add(attempt);
+        }
+    }
     override function create() {
+        makeBackgroundShit();
+        mouseCam = new FlxCamera();
+        mouseCam.bgColor.alpha = 0;
+        FlxG.cameras.add(mouseCam, false);
+        daMouse = new CustomMouseCursor();
+        daMouse.cameras = [mouseCam];
+        daMouse.visible = !FlxG.mouse.visible;
+        add(daMouse);
         alertCount = weatherAlerts.length;
         var tabs = [
             {name: 'Today', label: 'Today'},
@@ -55,6 +78,9 @@ class ForecastState extends FlxState {
         ForecastUI.resize(725, 500);
         ForecastUI.scrollFactor.set();
         ForecastUI.setPosition(FlxG.width - 750, 15);
+        @:privateAccess for (button in ForecastUI._tabs) {
+            //button.toggle_label            
+        }
         add(ForecastUI);
         add(new FlxText(0, 0, 0, 'WORK IN PROGRESS, PRESS ESC TO EXIT!'));
         // funcs go here but i need to make them first.
@@ -62,10 +88,26 @@ class ForecastState extends FlxState {
         addAstroUI();
         addTodayUI();
         addNowUI();
+        hourlyUIThing();
         ForecastUI.selected_tab_id = 'Today';
         doAlertCheck();
+        doMusicShit();
     }
-
+    var EAN:Bool = false;
+    function doMusicShit() {
+        if (!severeMode && !EAN) {
+            var nice = FlxG.random.int(1, 12);
+            FlxG.sound.playMusic(PathFinder.music(Std.string(nice)));
+        } else if (severeMode && !EAN) {
+            new FlxTimer().start(2, function(e:FlxTimer) {
+                FlxG.sound.playMusic(PathFinder.music('storm'), 0);
+                FlxG.sound.music.fadeIn(1, 0, 1, null);
+            });
+        } else {
+            trace("nothin happening.");
+        }
+    }
+    var hoverin:Bool = false;
     override function update(elapsed:Float) {
         if (FlxG.keys.justPressed.ESCAPE) {
             #if sys
@@ -74,15 +116,41 @@ class ForecastState extends FlxState {
             openSubState(new web.WebError('Escape key pressed. To use this application again,\nplease refresh the page.'));
             #end
         }
+
+        if (FlxG.keys.justPressed.R) {
+            trace('penis');
+            openSubState(new WeatherSearch());
+        }
+        if (daMouse != null) {
+            daMouse.update(elapsed);
+            var cockBlocker:Dynamic = null;
+            if (ForecastUI != null) {
+                for (tab in @:privateAccess ForecastUI._tabs) {
+                    if (tab.mouseIsOver) {
+                        daMouse.switchAnim('lonk');
+                        hoverin = true;
+                        cockBlocker = tab;
+                        break;
+                    } else {
+                        if (cockBlocker != null && !cockBlocker.mouseIsOver) cockBlocker = null;
+                        if (hoverin) hoverin = false;
+                    }
+                }
+            }
+            if (alertDropDown != null) {
+                if (FlxG.mouse.overlaps(alertDropDown) && alertDropDown.visible) {
+                    hoverin = true;
+                    daMouse.switchAnim('lonk');
+                } else {
+                    if (cockBlocker == null) hoverin = false;
+                }
+            }
+            if (!hoverin) {
+                daMouse.switchAnim('idle');
+            }
+        }
         super.update(elapsed); // to ensure updates even if i dont list it here.
     }
-    var alertDropDown:FlxUIDropDownMenuCustom;
-    var at_Event:FlxText;
-    var at_areas:FlxText;
-    var at_desc:FlxText;
-    var at_headline:FlxText;
-    var at_until:FlxText;
-
     function addNowUI() {
         nowThing = new FlxUI(null, ForecastUI);
         nowThing.name = 'Current';
@@ -90,25 +158,55 @@ class ForecastState extends FlxState {
         var curWeather:ResponseCurrent = location.current; // to get the current conditions
 
         var wxIcon:WeatherIcon = new WeatherIcon(15, 30, curWeather.condition.icon, SusUtil.getCurrentHour());
-
-        var condText:FlxText = new FlxText(wxIcon.x + 69, wxIcon.y, 0, curWeather.condition.text, 8);
+        var locText:FlxText = new FlxText(wxIcon.x, wxIcon.y - 18, 0, "Current conditions in " + location.location.name + ", " + location.location.region, 8);
+        var condText:FlxText = new FlxText(wxIcon.x + 69, wxIcon.y + 10, 0, curWeather.condition.text, 8);
 
         if (LaunchState.temperatureUnits == 'F') {
-            var temperatureText:FlxText = new FlxText(wxIcon.x + 69, condText.y + 10, 0, curWeather.temp_f + '\u2109', 16);
-            var feelsLikeText:FlxText = new FlxText(temperatureText.x, temperatureText.y + 18, 0, curWeather.feelslike_f + '\u2109');
+            var temperatureText:FlxText = new FlxText(wxIcon.x + 69, condText.y + 10, 0, curWeather.temp_f + '*F', 16);
+            var feelsLikeText:FlxText = new FlxText(temperatureText.x, temperatureText.y + 18, 0, curWeather.feelslike_f + '*F');
             nowThing.add(temperatureText);
             nowThing.add(feelsLikeText);
         } else {
-            var temperatureText:FlxText = new FlxText(wxIcon.x + 69, condText.y + 10, 0, curWeather.temp_c + '\u2103');
-            var feelsLikeText:FlxText = new FlxText(temperatureText.x, temperatureText.y + 18, 0, curWeather.feelslike_c + '\u2103');
+            var temperatureText:FlxText = new FlxText(wxIcon.x + 69, condText.y + 10, 0, curWeather.temp_c + '*C');
+            var feelsLikeText:FlxText = new FlxText(temperatureText.x, temperatureText.y + 18, 0, curWeather.feelslike_c + '*C');
             nowThing.add(temperatureText);
             nowThing.add(feelsLikeText);
         }
 
+        var precipString:String = '';
+        if (LaunchState.temperatureUnits == 'F') {
+            precipString = curWeather.precip_in + 'in. Precip';
+        } else {
+            precipString = curWeather.precip_mm + 'mm. Precip';
+        }
+        var precipTxt:FlxText = new FlxText(wxIcon.x, wxIcon.y + 69, 0, precipString, 8);
+
+        if (location.alerts.alert.length >= 1) {
+            var alertTxt:FlxText = new FlxText(precipTxt.x, precipTxt.y + 10, 0, 'Alerts: ' + alertEvents.join('\n'), 24);
+            alertTxt.setFormat(PathFinder.font('akkopro-light.ttf'), 16);
+            nowThing.add(alertTxt);
+        }
+        nowThing.add(locText);
         nowThing.add(wxIcon);
+        //nowThing.add(wxIcon);
         nowThing.add(condText);
         ForecastUI.addGroup(nowThing);
     }
+    function hourlyUIThing() {
+        hourThing = new FlxUI(null, ForecastUI);
+        hourThing.name = "Hourly";
+
+        var wipText = new FlxText(30, 50, 0, "WIP!", 32);
+        hourThing.add(wipText);
+        ForecastUI.addGroup(hourThing);
+    }
+    var alertDropDown:FlxUIDropDownMenuCustom;
+    var at_Event:FlxText;
+    var at_areas:FlxText;
+    var at_desc:FlxText;
+    var at_headline:FlxText;
+    var at_until:FlxText;
+    var at_instruct:FlxText;
     function addAlertUI() {
         alertThing = new FlxUI(null, ForecastUI);
         alertThing.name = 'Alerts';
@@ -124,37 +222,55 @@ class ForecastState extends FlxState {
 
         at_areas = new FlxText(at_Event.x, at_headline.y + 14, 0, 'N/A', 12);
 
-        at_desc = new FlxText(at_areas.x, at_areas.y + 28, 0, 'No description', 12);
+        at_instruct = new FlxText(at_areas.x, at_areas.y + 14, 0, 'Make a choice', 12);
 
-        at_until = new FlxText(at_areas.x, at_areas.y + 14, 0, 'Effective until you pick an alert.', 12);
+        at_until = new FlxText(at_areas.x, at_instruct.y + 14, 0, 'Effective until you pick an alert.', 12);
+
+        at_desc = new FlxText(at_until.x, at_until.y + 14, 0, 'No description', 12);
 
         alertThing.add(new FlxText(alertDropDown.x, alertDropDown.y - 18, 0, 'Select an alert:', 8));
         alertThing.add(at_Event);
         alertThing.add(at_areas);
         alertThing.add(at_desc);
+        alertThing.add(at_until);
         alertThing.add(at_headline);
+        alertThing.add(at_instruct);
         alertThing.add(alertDropDown);
         ForecastUI.addGroup(alertThing);
     }
-
+    var severeMode:Bool = false;
     function doAlertCheck() {
         for (event in alertEvents) {
             if (severeEvents.contains(event)) {
                 doSevereInterrupt(2);
+                severeMode = true;
+                break;
+            } else if (event == MUST_OPEN_GOOGLE) {
+                EAN = true;
+                FlxG.sound.play(PathFinder.sound("emergencyAlert"), 1, false, null, true, function() {
+                    FlxG.openURL("https://google.com/search?q=emergency+action+notification+" + location.location.name.replace(' ', '+'));
+                    SusUtil.API_Failure(888);
+                });
             }
         }
     }
 
     function doSevereInterrupt(delay:Float) {
         new FlxTimer().start(delay, function(tmr:FlxTimer) {
-            FlxG.sound.play(PathFinder.sound('susSound'), 1, false, null, true, fancySwitch); // i'm hoping to make an animation thingy that plays instead of a camera fade effect
+            FlxG.sound.play(PathFinder.sound('alert'), 1, false, null, true, fancySwitch); // i'm hoping to make an animation thingy that plays instead of a camera fade effect
         });
     }
 
     function fancySwitch() {
-        FlxG.camera.fade(0xFF000000, 1, false, function() {
+        FlxG.camera.fade(0xFF000000, 0.5, false, function() {
             ForecastUI.selected_tab_id = 'Alerts';
-            FlxG.camera.fade(0xFF000000, 1, true, function() {
+            for (alert in weatherAlerts) {
+                if (severeEvents.contains(alert.event)) {
+                    loadAlert(alert);
+                    break;
+                }
+            }
+            FlxG.camera.fade(0xFF000000, 0.5, true, function() {
                 trace('e');
             });
         });
@@ -222,8 +338,10 @@ class ForecastState extends FlxState {
         at_desc.fieldWidth = 0;
         at_headline.text = alertValues[0];
         at_headline.fieldWidth = 0;
-        at_until.text = alertValues[10];
+        at_until.text = 'Effective until: ' + alertValues[10];
         at_until.fieldWidth = 0;
+        at_instruct.text = alertValues[12];
+        at_instruct.fieldWidth = 0;
     }
     function reloadAlertDropDown() {
         var droplist:Array<String> = [];
