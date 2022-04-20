@@ -34,14 +34,17 @@ class WebNotice extends FlxSubState {
         noticeTxt.setFormat(null, 16, 0xFFFFFFFF, CENTER);
         noticeTxt.screenCenter();
         noticeTxt.scrollFactor.set();
-        add(noticeTxt);
-
+        var dumThing = FlxColor.gradient(0xFFADB3D5, 0xFFF1BB3F, Std.int(FlxG.height));
         timeoutBar = new FlxBar(0, 0, RIGHT_TO_LEFT, 100, 16, this, 'timeout', 0, 5);
         timeoutBar.createGradientFilledBar(FlxColor.gradient(0xFFAACCFF, 0xFF00007F, 5), 1, 180, true, 0xFF000000);
-        add(timeoutBar);
-
+        var eg = Std.int(FlxG.height);
+        for (fard in 0...eg) {
+            add(new FlxSprite(0, FlxG.height - fard).makeGraphic(Std.int(FlxG.width), 1, dumThing[fard]));
+        }
         pressReturnDisp = new FlxText(0, FlxG.height - 18, 0, pressReturnText, 16);
         pressReturnDisp.scrollFactor.set();
+        add(noticeTxt);
+        add(timeoutBar);
         add(pressReturnDisp);
 
         FlxG.sound.play(PathFinder.sound('errorOops'), 1);
@@ -57,21 +60,25 @@ class WebNotice extends FlxSubState {
         super.update(elapsed);
 
         if (timeout <= 0) {
-            pressReturnDisp.text = 'Press RETURN to continue.';
+            pressReturnDisp.text = 'Press RETURN or tap the screen to continue.';
         }
 
         if (FlxG.keys.justPressed.ENTER && timeout <= 0) {
+            close();
+        }
+
+        if ((FlxG.mouse.justPressed || FlxG.touches.getFirst() != null && FlxG.touches.getFirst().justPressed) && timeout <= 0) {
             close();
         }
     }
 }
 #else
 import SusUtil;
-
+import flixel.FlxSubState;
 class WebNotice extends FlxSubState {
     public function new(msg:String) {
         super();
-        FlxG.log.error('penis');
+        flixel.FlxG.log.error('penis');
         close();
     }
 }
