@@ -29,14 +29,16 @@ class InitialSetup extends FlxState {
     var hintText:FlxText;
     #if web
     var NextButton:FlxButton;
+    var DoneButton:FlxButton;
     #end
 
     public function new() {
         super();
+        if (!FlxG.mouse.visible) FlxG.mouse.visible = true;
     }
 
     override function create() {
-        FlxG.sound.playMusic(PathFinder.sound('funnyinst'), 0.8);
+        #if !GH_IO FlxG.sound.playMusic(PathFinder.sound('funnyinst'), 0.8); #end
         var bg = new FlxSprite(0);
         bg.loadGraphic(PathFinder.image('rainBgDesat'));
         bg.setGraphicSize(Std.int(bg.width * 1.25));
@@ -53,16 +55,26 @@ class InitialSetup extends FlxState {
         jej.setFormat(null, 16, 0xFFFFFFFF, CENTER);
         jej.screenCenter();
         add(jej);
-        #if web
+        #if (mobile || web)
         NextButton = new FlxButton(FlxG.width - 100, FlxG.height - 26, 'Next', doNext_Web);
         add(NextButton);
+        DoneButton = new FlxButton(NextButton.x, NextButton.y, 'Done', function() {
+            FlxG.save.data.finishedSetup = true;
+            FlxG.sound.music.fadeOut(1.5, 0, function(twn:flixel.tweens.FlxTween) {
+                trace('pp');
+                FlxG.save.flush();
+                openSubState(new web.WebError('Initial setup has been completed, please refresh the page.'));
+            });
+        });
+        add(DoneButton);
+        DoneButton.kill();
         #end
 
         hintText = new FlxText(0, FlxG.height - 14, 0, 'Press ENTER to continue', 12);
         add(hintText);
     }
 
-    #if web
+    #if (mobile || web)
     function doNext_Web() {
         if (curStep != 2) {
             curStep += 1;
@@ -191,6 +203,10 @@ class InitialSetup extends FlxState {
         new FlxTimer().start(3, function(tmr:FlxTimer) {
             trace('yes');
             readyToExit = true;
+            #if web
+            NextButton.kill();
+            DoneButton.revive();
+            #end
             hintText.text = 'Press ENTER to exit';
         });
     }
