@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<meta title="HaxeFlixel Weather Thing" package="dumb.devin503.weather" version="0.0.3" company="devin503" />
+	<meta title="HaxeFlixel Weather Thing" package="dumb.silvert3.weather" version="0.0.4" company="silvert3" />
 	<app main="Main" path="Export" file="FlxWeather" />
 	<app preloader="flixel.system.FlxPreloader" />
+	<app path="WebShit" if="DUMBASS" />
+	<architecture name="armv7" exclude="arm64 x86_64 i386" if="ios" />
+	<!-- <config:ios prerendered-icon="false" /> -->
+	<section if="ios">
+		<meta title="HxWeather"/>
+		<dependency name="Metal.framework" />
+	</section>
 	
-	<source path="Source" />
+	<source path="source" />
 	
 	<haxelib name="lime" />
 	<haxelib name="flixel" />
@@ -13,17 +20,32 @@
 	<haxelib name="flixel-addons" />
 	<haxelib name="openfl" />
 	<haxelib name="weatherapi-hx" />
-	
-	
-	<assets path="Assets/Sounds/" exclude="*.ogg" if="web" />
-	<assets path="Assets/Sounds/" exclude="*.mp3" unless="web" />
+	<haxelib name="tink_core" />
+	<haxelib name="actuate" /> <!--idk as a just in case, might be useful for the fnfalphabet stuf-->
+	<haxelib name="extension-webm" unless="html5" />
+	<assets path="Assets/Sounds" exclude="*.ogg" if="web" />
+	<assets path="Assets/Sounds" exclude="*.mp3" unless="web" />
 	<assets path="Assets/Icons" exclude="*.md" />
-	<assets path="Assets/Images" exclude="Eduardo.*" if="web" />
+	<assets path="Assets/Images" />
 	<assets path="Assets/Placeholders" exclude="*.md" />
+	<assets path="Assets/Music" exclude="*.ogg" if="web"/>
+	<assets path="Assets/Music" exclude="*.mp3" unless="web" />
+	<assets path="Assets/JS" if="GH_IO"/>
+	<assets path="Assets/FunnyVideos" if="RATS" />
+	
+	<assets path="Assets/Fonts" embed="true" />
+	<assets path="winTts" if="windows" />
+	<define name="WINDUSSY" if="debug windows" /> <!-- remind me why i did this -->
+	<define name="MACUSSY" if="debug macos" />
+	<define name="GH_IO" if="release html5" />
+	<define name="RATS" if="release windows" />
+	
+	<set name="desktop" unless="html5" />
+	<define name="VIDEOS_ALLOWED" if="desktop" />
+	<echo value="videos allowed" if="VIDEOS_ALLOWED" />
 
-	<haxedef name="WINDUSSY" if="debug windows" /> <!-- remind me why i did this -->
 
-	<window width="1368" height="700" fps="" background="#000000" hardware="false" vsync="true" />
+	<window width="1368" height="700" fps="60" background="#000000" hardware="false" vsync="true" />
 
 	<icon path="Artussy/ballnutters.png" if="debug" />
 	<icon path="Artussy/wxIcon.png" unless="debug" />
