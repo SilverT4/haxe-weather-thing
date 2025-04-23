@@ -4,11 +4,10 @@ import flixel.FlxSprite;
 import PathFinder;
 
 using StringTools;
-
+#if !GH_IO
 /**Well well well.
     @since WELL WELL WELL. (v0.0.2)*/
 class Eduardo extends FlxSprite {
-    #if sys
     var doinJumpscare:Bool = false;
     public function jumpscare() {
         if (animation.getByName('wellWellWell') != null) {
@@ -44,6 +43,7 @@ class Eduardo extends FlxSprite {
         animation.addByPrefix('idle', 'EduardoIdle', 24, false);
         animation.addByIndices('wellWellWell', 'EduardoWell', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], '', 24, false);
         animation.play('idle');
+        antialiasing = false;
     }
 
     public function dance() {
@@ -51,11 +51,21 @@ class Eduardo extends FlxSprite {
             animation.play('idle');
         }
     }
-    #else
-    public function new(x:Float, y:Float) {
-        super(x, y);
-        loadGraphic(PathFinder.getIcon('113.png', 'night'));
-        flixel.FlxG.state.openSubState(new web.WebNotice('Eduardo file still being called from source of this state. You\'ll see a weather icon to save on memory, as the Eduardo spritesheet is pretty large.'));
-    }
-    #end
 }
+#else
+class Eduardo {
+    public function dance() {
+        trace('placeholder');
+    }
+    public function new(x:Float, y:Float) {
+        trace(x + ", " + y); // just traces since Eduardo is his own class in GH.io builds!
+    }
+    public function jumpscare() {
+        trace("well well well");
+        if (flixel.FlxG.state != null) flixel.FlxG.state.openSubState(new web.WebNotice("Well Well Well")); // bc yes
+    }
+    public function spawnJumpscare() {
+        jumpscare(); // just because it might be easier
+    }
+}
+#end

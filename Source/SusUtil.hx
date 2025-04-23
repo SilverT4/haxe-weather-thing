@@ -166,5 +166,16 @@ class SusUtil {
         @:privateAccess return lime.system.System.get_platformVersion();
     }
     #end
+    /**Generates a gradient using `Col_1` and `Col_2` as the stop points, and `stepCount` to determine how many colours to put in between them.
+        
+    @param Col_1 The first `FlxColor`.
+    @param Col_2 The second `FlxColor`.
+    @param stepCount How many colours to put between `Col_1` and `Col_2`.
+    @return An array of `FlxColor` objects with a length of `stepCount`.
+    @since April 2022 (v0.0.3)*/
+    public static function backGradient(Col_1:flixel.util.FlxColor, Col_2:flixel.util.FlxColor, stepCount:Int):Array<flixel.util.FlxColor> {
+        trace("Generating a gradient!");
+        return flixel.util.FlxColor.gradient(Col_1, Col_2, stepCount);
+    }
     static inline final IMGS_PATH_ICON = 'Assets/Icons/weather/64x64/';
 }

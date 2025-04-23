@@ -25,6 +25,12 @@ class PathFinder {
     static #if !ios inline #end final PlaceholderPath = #if ios lime.system.System.applicationStorageDirectory+'Contents/Resources/'+#end'Assets/Placeholders/';
     static #if !ios inline #end final AudioExt = #if web '.mp3' #else '.ogg' #end;
     static #if !ios inline #end final MusicPath = #if ios lime.system.System.applicationStorageDirectory+'Contents/Resources/'+#end'Assets/Music/'; // fuck
+    #if VIDEOS_ALLOWED static inline final VideoPath = 'Assets/FunnyVideos/'; // bruh
+    public static function funnyVideo(name:String) {
+        if (FileSystem.exists(VideoPath + name)) return VideoPath + name;
+        else return null;
+    }
+    #end
     /**Grabs a weather icon if you have the direct path to it in the application's files.
         @param key Path to the icon
         @returns key if the file exists, 'not found' if it does not.

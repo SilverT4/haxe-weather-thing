@@ -5,10 +5,13 @@ import lime.system.Clipboard;
 import flixel.input.keyboard.FlxKey;
 import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUIDropDownMenu;
+import flixel.text.FlxText;
 import flixel.FlxG;
 import APIShit;
 import flixel.FlxSubState;
 import flixel.FlxSprite;
+import flixel.FlxCamera;
+import flixel.util.FlxColor;
 import FlxUIDropDownMenuCustom;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUI;
@@ -27,7 +30,10 @@ class WeatherSearch extends FlxSubState {
     var locations:Array<ResponseSearch> = [];
     var DEST_ON_SEVEN:Array<Dynamic> = [];
     var blockInputWhileTyping:Array<FlxUIInputText> = [];
-    #if !web var ed:Eduardo; #end
+    var ed:Eduardo;
+    var mouseCam:FlxCamera;
+    var daMouse:CustomMouseCursor;
+    var hoverableObjects:Array<Array<Dynamic>> = [];
     public static var instance:WeatherSearch;
     public function new() {
         super();
@@ -39,8 +45,23 @@ class WeatherSearch extends FlxSubState {
     }
 
     override function create() {
+        var testPiss = FlxColor.gradient(0xFF000000, 0xFFADB3D5, Std.int(FlxG.height));
+        var teeth = Std.int(FlxG.height);
+        for (fard in 0...teeth) {
+            var edamame = new FlxSprite(0, FlxG.height - fard);
+            edamame.makeGraphic(Std.int(FlxG.width), 1, testPiss[fard]);
+            edamame.alpha = 1;
+            add(edamame);
+        }
+        mouseCam = new FlxCamera();
+        mouseCam.bgColor.alpha = 0;
+        FlxG.cameras.add(mouseCam, false);
+        daMouse = new CustomMouseCursor();
+        daMouse.cameras = [mouseCam];
+        add(daMouse);
         var tabs = [
-            { name: 'Search', label: 'Search' }
+            { name: 'Search', label: 'Search' },
+            { name: 'Units', label: 'Units' }
         ];
         SearchUI = new FlxUITabMenu(null, tabs);
         SearchUI.resize(400, 150);
@@ -48,14 +69,17 @@ class WeatherSearch extends FlxSubState {
         trace(SearchUI);
         add(SearchUI);
         DEST_ON_SEVEN.push(SearchUI);
+        for (tab in @:privateAccess SearchUI._tabs) {
+            hoverableObjects.push([tab, "lonk"]);
+        }
         setupSearchUI();
-        #if !web
+        setupUnitUI();
         ed = new Eduardo(0, 0);
         //ed.visible = false;
         ed.dance();
-        add(ed);
+        #if !GH_IO add(ed); #end
         trace(ed);
-        #end
+        //FlxG.sound.play("Assets/Music/storm.wav");
 
         if (ForecastState.location != null) {
             var exitButton = new FlxButton(0, 69, 'Exit', function() {
@@ -84,7 +108,32 @@ class WeatherSearch extends FlxSubState {
                 }
             }
         }
-
+        if (daMouse != null) {
+            daMouse.update(elapsed);
+            var daBullshit = 'idle';
+            var curHover:Dynamic = null;
+            for (asset in hoverableObjects) {
+                if (asset[0] is flixel.addons.ui.interfaces.IFlxUIButton) {
+                    if (asset[0].mouseIsOver) {
+                        daBullshit = asset[1];
+                        curHover = asset[0];
+                        //hoverin = true;
+                    }
+                    else return;
+                } else if (asset[0].visible && FlxG.mouse.overlaps(asset[0])) {
+                    daBullshit = asset[1];
+                    curHover = asset[0];
+                    //hoverin = true;
+                    break;
+                } else {
+                        if (curHover != null && !(curHover.mouseIsOver || FlxG.mouse.overlaps(curHover))) {
+                        curHover = null;
+                        daBullshit = 'idle';
+                    }
+                }
+            }
+            daMouse.switchAnim(daBullshit);
+        }
         if (blockInput) {
             if (curBlocker != null) {
                 if (curBlocker.hasFocus) {
@@ -95,7 +144,8 @@ class WeatherSearch extends FlxSubState {
                 }
             }
         }
-        #if !web
+
+        #if !GH_IO
         if (ed != null) {
             ed.update(elapsed);
             if (ed.animation.curAnim.finished) ed.dance();
@@ -104,7 +154,13 @@ class WeatherSearch extends FlxSubState {
                 ed.jumpscare();
             } */
         }
-
+        #end
+        #if web
+        if (FlxG.keys.checkStatus(32, JUST_PRESSED) && searchInputBox.hasFocus) {
+            searchInputBox.text += ' ';
+        }
+        #end
+        #if !GH_IO
         if (FlxG.keys.justPressed.L && !blockInput) {
             ed.animation.play('wellWellWell');
             FlxG.sound.play(PathFinder.loud_sound('theFunnyWell'), 1, false, null, true, function() {
@@ -130,11 +186,11 @@ class WeatherSearch extends FlxSubState {
                     asset = null;
                 }
                 close();
-                FlxG.switchState(new BasicOptionMenu());
+                FlxG.switchState(new settings.ActualSettingShit());
             }
         }
     }
-
+    var searchInputBox:FlxUIInputText;
     function setupSearchUI() {
         UIAss = new FlxUI(null, SearchUI);
         UIAss.name = 'Search';
@@ -143,18 +199,22 @@ class WeatherSearch extends FlxSubState {
         cityDropDownMenu = new FlxUIDropDownMenuCustom(15, 60, FlxUIDropDownMenuCustom.makeStrIdLabelArray(['Search first'], true), function (loc:String) {
             forecastLocation = APIShit.getForecast(locations[Std.parseInt(loc)].name + ', ' + locations[Std.parseInt(loc)].region); // this should give City, State!
         });
+        hoverableObjects.push([cityDropDownMenu, "lonk"]);
         DEST_ON_SEVEN.push(cityDropDownMenu);
 
-        var searchInputBox = new FlxUIInputText(15, 30, 200, 'Enter a search term...', 8);
+        searchInputBox = new FlxUIInputText(15, 30, 200, 'Enter a search term...', 8);
         DEST_ON_SEVEN.push(searchInputBox);
+        hoverableObjects.push([searchInputBox, "txt"]);
         blockInputWhileTyping.push(searchInputBox);
 
         var searchButton:FlxButton = new FlxButton(searchInputBox.x + 210, searchInputBox.y, 'Search', function() {
                 doSearch(searchInputBox.text);
         });
+        hoverableObjects.push([searchButton, "lonk"]);
         DEST_ON_SEVEN.push(searchButton);
 
         var goButton = new FlxButton(160, 100, 'Go', openForecastState);
+        hoverableObjects.push([goButton, "lonk"]);
         DEST_ON_SEVEN.push(goButton);
 
         UIAss.add(cityDropDownMenu);
@@ -163,10 +223,13 @@ class WeatherSearch extends FlxSubState {
         UIAss.add(goButton);
         SearchUI.addGroup(UIAss);
     }
-
+    var allowSwitch:Bool = true;
     function openForecastState() {
         if (forecastLocation != null) {
             ForecastState.location = forecastLocation;
+        } else if (searchInputBox.text.length >= 1 && searchInputBox.text != 'Enter a search term...') {
+            trace("attempting to get directly");
+            ForecastState.location = APIShit.getForecast(searchInputBox.text);
         } else {
             ForecastState.location = SusUtil.placeholderForecast(); // so we have a placeholder
         }
@@ -175,7 +238,7 @@ class WeatherSearch extends FlxSubState {
         trace(haxe.Json.stringify(forecastLocation, "\t"));
         Clipboard.text = haxe.Json.stringify(forecastLocation, "\t"); // made this debug so it doesnt just copy on release builds
         #end
-        FlxG.switchState(new ForecastState());
+        if (allowSwitch) FlxG.switchState(new ForecastState());
     }
 
     function doSearch(Location:String) {
@@ -196,5 +259,30 @@ class WeatherSearch extends FlxSubState {
             }
             cityDropDownMenu.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(cityNames, false));
         }
+    }
+
+    function doUnitThing(unit:String) {
+        switch (Std.parseInt(unit)) {
+            case 0:
+                trace("USING THE VIRGIN FAHRENHEIT");
+                LaunchState.temperatureUnits = 'F';
+                FlxG.save.data.tempUnits = ['F', 'mi'];
+            case 1:
+                trace("USING THE CHAD CELSIUS");
+                LaunchState.temperatureUnits = 'C';
+                FlxG.save.data.tempUnits = ['C', 'km'];
+        }
+    }
+    var hoverin:Bool = false;
+    var unitDrop:FlxUIDropDownMenuCustom;
+    function setupUnitUI() {
+        var dum:FlxUI = new FlxUI(null, SearchUI);
+        dum.name = "Units";
+
+        unitDrop = new FlxUIDropDownMenuCustom(15, 30, FlxUIDropDownMenuCustom.makeStrIdLabelArray(["Fahrenheit", "Celsius"], true), doUnitThing);
+        hoverableObjects.push([unitDrop, "lonk"]);
+        dum.add(unitDrop);
+        dum.add(new FlxText(15, unitDrop.y - 18, 0, "Temperature units:", 8));
+        SearchUI.addGroup(dum);
     }
 }

@@ -1,5 +1,8 @@
 package;
 
+import flixel.input.keyboard.FlxKey;
+import flixel.tweens.FlxTween;
+import winUtils.Balabolka;
 import openfl.Lib;
 import APIShit;
 import flixel.FlxG;
@@ -33,6 +36,7 @@ class ForecastState extends FlxState {
     var mouseCam:FlxCamera;
     var daMouse:CustomMouseCursor;
     var alertCount:Int = 0;
+    var ratCode:Array<FlxKey> = [82,65,84,83];
     public function new () {
         super();
         trace('vagina');
@@ -108,6 +112,7 @@ class ForecastState extends FlxState {
         }
     }
     var hoverin:Bool = false;
+    var checkin:Array<FlxKey> = [];
     override function update(elapsed:Float) {
         if (FlxG.keys.justPressed.ESCAPE) {
             #if sys
@@ -117,7 +122,29 @@ class ForecastState extends FlxState {
             #end
         }
 
+        #if (debug && windows)
+        if (bala != null) {
+            if (bala.noob != null) trace(bala.noob.getString(0, bala.noob.length));
+        }
         if (FlxG.keys.justPressed.R) {
+            checkin.push(FlxKey.R);
+        }
+        if (FlxG.keys.justPressed.A && checkin.contains(FlxKey.R)) {
+            checkin.push(FlxKey.A);
+        }
+        if (FlxG.keys.justPressed.T && checkin.contains(FlxKey.R) && checkin.contains(FlxKey.A)) {
+            checkin.push(FlxKey.T);
+        }
+        if (FlxG.keys.justPressed.S && checkin.contains(FlxKey.R) && checkin.contains(FlxKey.A) && checkin.contains(FlxKey.T)) {
+            checkin.push(FlxKey.S);
+        }
+        trace(checkin);
+        if (checkin.join(' ') == ratCode.join(' ')) {
+            FlxG.switchState(new VideoState(PathFinder.funnyVideo("brown.webm"), new PoopyDimension()));
+        }
+        #end
+
+        if (FlxG.keys.justPressed.F) {
             trace('penis');
             openSubState(new WeatherSearch());
         }
@@ -182,7 +209,7 @@ class ForecastState extends FlxState {
         var precipTxt:FlxText = new FlxText(wxIcon.x, wxIcon.y + 69, 0, precipString, 8);
 
         if (location.alerts.alert.length >= 1) {
-            var alertTxt:FlxText = new FlxText(precipTxt.x, precipTxt.y + 10, 0, 'Alerts: ' + alertEvents.join('\n'), 24);
+            var alertTxt:FlxText = new FlxText(precipTxt.x, precipTxt.y + 10, 0, 'Alerts: ' + alertEvents.join('\n') + "\n", 24);
             alertTxt.setFormat(PathFinder.font('akkopro-light.ttf'), 16);
             nowThing.add(alertTxt);
         }
@@ -207,12 +234,17 @@ class ForecastState extends FlxState {
     var at_headline:FlxText;
     var at_until:FlxText;
     var at_instruct:FlxText;
+    #if (sys && windows)
+    var cumAlert:FlxButton;
+    var tts:TextToSpeech;
+    var bala:Balabolka;
+    #end
     function addAlertUI() {
         alertThing = new FlxUI(null, ForecastUI);
         alertThing.name = 'Alerts';
 
         alertDropDown = new FlxUIDropDownMenuCustom(15, 30, FlxUIDropDownMenuCustom.makeStrIdLabelArray(['NO ALERTS'], true), function(alert:String) {
-            loadAlert(weatherAlerts[Std.parseInt(alert)]);
+            if (weatherAlerts.length > 0) loadAlert(weatherAlerts[Std.parseInt(alert)]);
         });
         reloadAlertDropDown(); // THIS WILL PUT THE EVENT NAMES IN!
 
@@ -228,6 +260,24 @@ class ForecastState extends FlxState {
 
         at_desc = new FlxText(at_until.x, at_until.y + 14, 0, 'No description', 12);
 
+        #if (sys && windows)
+        cumAlert = new FlxButton(alertDropDown.x + 200, alertDropDown.y, "Read alert", function() {
+            if (at_desc.text != null) {
+                if (FlxG.save.data.ttsSource == 'POWERSHELL') {
+                    tts = new TextToSpeech(at_desc.text.replace('\n', ' '));
+                    tts.readAlert();
+                } else if (FlxG.save.data.ttsSource == 'BALABOLKA') {
+                    bala = new Balabolka();
+                    bala.readAlert(at_desc.text.replace('\n', ' '));
+                } else {
+                    bala = new Balabolka();
+                    bala.readAlert(at_desc.text.replace('\n', ' ')); // use balabolka by default
+                }
+                FlxTween.tween(FlxG.sound, { volume: 0.6 }, 0.5);
+            }
+        });
+        alertThing.add(cumAlert);
+        #end
         alertThing.add(new FlxText(alertDropDown.x, alertDropDown.y - 18, 0, 'Select an alert:', 8));
         alertThing.add(at_Event);
         alertThing.add(at_areas);
