@@ -18,4 +18,4 @@ Open the zip file. When extracting, use the Assets/Icons directory of your repos
 
 ### Mac users
 
-Sorry, I'm not sure how to do it on a mac yet.
+Instructions for macOS are actually pretty similar to the Linux instructions. Just open the zip above. The built-in Archive Utility will extract it to wherever you downloaded it, so if you usually download to Downloads, just go to your Finder and move it to your repository under `Assets/Icons`.
